@@ -4,7 +4,7 @@ Back in university, in the long passed year of 2014, I aimed to make a home stat
 
 For whatever reason I tried writing it in PHP and MySQL, languages I was (and am) familiar but not particularly proficient with. I wanted dozens of integrations with third parties, support for multiple user accounts, and to make absolutely everything configurable via a web UI—anyway, it sucked. Upon completion of university I left it to rot.
 
-In late 2018, armed with a newly acquired Raspberry Pi, I revived the project and in a couple of evenings bust out [a reasonably well working dashboard](https://github.com/querkmachine/dashboard/tree/develop) using [Express](https://expressjs.com/) and web sockets, for reasons of "remote controlling this would be cool" that never came to fruition. Rainbow Dashboard 2.0 could tell you the time, the weather, and what the plural of "beef" is, but not much else more. 
+In late 2018, armed with a newly acquired Raspberry Pi, I revived the project and in a couple of evenings bust out [a reasonably well working dashboard](https://github.com/querkmachine/dashboard/tree/develop) using [Express](https://expressjs.com/) and web sockets, for reasons of "remote controlling this would be cool" that never came to fruition. Rainbow Dashboard 2.0 could tell you the time, the weather, what my friends were [tooting](https://joinmastodon.org/) about and what the plural of "beef" is, but not much else more. 
 
 2.0 has been in constant use since release, but hasn't been updated at all in that time. The way it got built is a little cumbersome and difficult to expand upon, so now, in July 2019, I'm rewriting it all in everyone's favourite framework of the hour: [Vue](https://vuejs.org/). Why? Because I've used Vue for ages and are pretty comfortable doing crazy things with it, but I've not really done much with web components and [Vue CLI](http://cli.vuejs.org/) so... now I am.
 
@@ -14,7 +14,7 @@ Neat, eh?
 
 ### Things I wanna add
 
-- [x] a clock
+- [x] A clock
 - [x] Philips Hue integration
 - [ ] Mastodon feed integration
 - [ ] Dark Sky integration
@@ -27,14 +27,15 @@ Neat, eh?
 ### `.env` variables that aren't in source control
 
 ```
+# Philips Hue integration
 VUE_APP_HUE_API_ENDPOINT=
 VUE_APP_HUE_API_KEY=
 ```
 
 ### Those terminal commands in full
 
-Project setup: `npm install`
-Development: `npm run serve`
-Production: `npm run build`
-Tests: `npm run test`
+Project setup: `npm install`\
+Development: `npm run serve`\
+Production: `npm run build`\
+Tests: `npm run test`\
 Linting: `npm run lint`
