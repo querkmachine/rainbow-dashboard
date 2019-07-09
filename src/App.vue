@@ -1,16 +1,19 @@
 <template>
-    <div id="app">
-        <Clock />
-    </div>
+	<div id="app">
+		<Clock />
+		<PhilipsHue />
+	</div>
 </template>
 
 <script>
 import Clock from './components/Clock.vue';
+import PhilipsHue from './components/PhilipsHue.vue';
 export default {
-    name: 'app',
-    components: {
-        Clock
-    }
+	name: 'app',
+	components: {
+		Clock,
+		PhilipsHue
+	}
 }
 </script>
 
