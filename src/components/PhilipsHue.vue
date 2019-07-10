@@ -127,8 +127,8 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	padding: 1rem;
+	border: 1px solid rgba(255, 255, 255, .2);
 	color: #fff;
-	background-color: rgba(255, 255, 255, .2);
 }
 .philips-hue__item--invert {
 	color: #000;
@@ -138,10 +138,11 @@ export default {
 }
 .philips-hue__value {
 	font-size: xx-large;
-	font-weight: 300;
+	font-weight: 500;
 }
 .philips-hue__value-label {
 	font-size: smaller;
+	font-weight: 300;
 	opacity: .67;
 }
 </style>
