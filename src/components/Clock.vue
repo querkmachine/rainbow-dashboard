@@ -57,7 +57,9 @@ export default {
 .clock__progress::-webkit-progress-bar {
 	background-color: transparent;
 }
-.clock__progress::-webkit-progress-value,
+.clock__progress::-webkit-progress-value {
+	background-color: var(--highlight);
+}
 .clock__progress::-moz-progress-bar {
 	background-color: var(--highlight);
 }
