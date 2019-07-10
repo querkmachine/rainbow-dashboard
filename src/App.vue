@@ -2,17 +2,20 @@
 	<div id="app">
 		<Clock />
 		<PhilipsHue />
+		<DarkSky :lat="51.454330" :lng="-2.588680" />
 	</div>
 </template>
 
 <script>
 import Clock from './components/Clock.vue';
 import PhilipsHue from './components/PhilipsHue.vue';
+import DarkSky from './components/DarkSky.vue';
 export default {
 	name: 'app',
 	components: {
 		Clock,
 		PhilipsHue
+		DarkSky
 	}
 }
 </script>
