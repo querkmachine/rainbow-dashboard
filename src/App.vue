@@ -14,7 +14,7 @@ export default {
 	name: 'app',
 	components: {
 		Clock,
-		PhilipsHue
+		PhilipsHue,
 		DarkSky
 	}
 }
