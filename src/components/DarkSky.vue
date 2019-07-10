@@ -113,7 +113,7 @@ export default {
 			localStorage.setItem('RD_DARKSKY_FORECAST', JSON.stringify(this.forecastData));
 		},
 		updateForecast: function() {
-			if(this.loadData()) { return; }
+			if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
 			Axios
 				.get(`https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${process.env.VUE_APP_DARKSKY_API_KEY}/${this.lat},${this.lng}`, {
 					params: {
