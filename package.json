@@ -12,6 +12,7 @@
     "core-js": "^2.6.5",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "twemoji": "^12.1.2",
     "vue": "^2.6.10",
     "vue-skycon": "git+https://github.com/timleland/vue-skycon.git"
   },

@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import Twemoji from 'twemoji';
 import Clock from './components/Clock.vue';
 import PhilipsHue from './components/PhilipsHue.vue';
 import DarkSky from './components/DarkSky.vue';
@@ -16,6 +17,12 @@ export default {
 		Clock,
 		PhilipsHue,
 		DarkSky
+	},
+	mounted() {
+		Twemoji.parse(document.body, {
+			folder: 'svg',
+			ext: '.svg'
+		});
 	}
 }
 </script>
@@ -43,5 +50,11 @@ body {
 }
 @supports (font-variation-settings: normal) {
 	html { font-family: 'Inter var', sans-serif; }
+}
+.emoji {
+	height: 1em;
+	width: 1em;
+	margin: 0 .05em 0 .1em;
+	vertical-align: -0.1em;
 }
 </style>
