@@ -1,6 +1,6 @@
 <template>
 	<ul class="philips-hue">
-		<li v-for="item in displayDevices" :key="item.id" :class="['philips-hue__item', item.cssInvert ? 'philips-hue__item--invert' : '']" :style="item.on && item.cssBackground ? 'background-color:' + item.cssBackground : ''">
+		<li v-for="item in displayDevices" :key="item.id" :class="['philips-hue__item', item.on && item.cssInvert ? 'philips-hue__item--invert' : '']" :style="item.on && item.cssBackground ? 'background-color:' + item.cssBackground : ''">
 			<div class="philips-hue__label">
 				{{ item.name }}
 			</div>
