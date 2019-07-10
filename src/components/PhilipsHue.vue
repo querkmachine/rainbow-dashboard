@@ -26,6 +26,12 @@ import Axios from 'axios';
 import Moment from 'moment';
 export default {
 	name: 'PhilipsHue',
+	props: {
+		reloadInterval: {
+			type: Number,
+			default: 2000
+		}
+	},
 	data() {
 		return {
 			lastUpdate: '',
@@ -37,7 +43,7 @@ export default {
 		this.updateDevices();
 		setInterval(() => {
 			this.updateDevices();
-		}, 2000);
+		}, this.reloadInterval);
 	},
 	computed: {
 		displayDevices: function() {
