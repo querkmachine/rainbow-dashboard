@@ -1,22 +1,19 @@
 <template>
 	<div id="app">
 		<Clock />
-		<PhilipsHue />
-		<DarkSky :lat="51.454330" :lng="-2.588680" />
+		<Mastodon />
 	</div>
 </template>
 
 <script>
 import Twemoji from 'twemoji';
 import Clock from './components/Clock.vue';
-import PhilipsHue from './components/PhilipsHue.vue';
-import DarkSky from './components/DarkSky.vue';
+import Mastodon from './components/Mastodon.vue';
 export default {
 	name: 'app',
 	components: {
 		Clock,
-		PhilipsHue,
-		DarkSky
+		Mastodon
 	},
 	mounted() {
 		Twemoji.parse(document.body, {
