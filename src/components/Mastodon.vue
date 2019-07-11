@@ -229,6 +229,7 @@ export default {
 .mastodon__content >>> a {
 	color: var(--highlight);
 }
+.mastodon__content >>> a .invisible:first-child { display: none; }
 .mastodon__content > :first-child { margin-top: 0; }
 .mastodon__content > :last-child { margin-bottom: 0; }
 
