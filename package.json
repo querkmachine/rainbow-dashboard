@@ -15,7 +15,8 @@
     "moment": "^2.24.0",
     "twemoji": "^12.1.2",
     "vue": "^2.6.10",
-    "vue-skycon": "git+https://github.com/timleland/vue-skycon.git"
+    "vue-skycon": "git+https://github.com/timleland/vue-skycon.git",
+    "vue-timeago": "^5.1.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.9.0",

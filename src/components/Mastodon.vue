@@ -8,7 +8,7 @@
 						<img :src="item.account.avatar" :alt="item.account.acct">
 					</div>
 					<div class="mastodon__timestamp">
-						{{ item.created_at | formatTimeAgo }}
+						<Timeago :datetime="item.created_at" :auto-update="30" />
 					</div>
 				</div>
 				<div class="mastodon__inner">
@@ -41,30 +41,21 @@
 </template>
 
 <script>
+import Timeago from 'vue-timeago';
 import Mastodon from 'mastodon-api';
 import MastodonCard from './Mastodon-Card.vue';
 import MastodonMedia from './Mastodon-Media.vue';
-import Moment from 'moment';
+import Vue from 'vue';
 
-// Customise Moment timeago strings
-Moment.updateLocale('en', {
-	relativeTime: {
-		future: 'in %s',
-		past: '%s ago',
-		s: '%ds',
-		ss: '%ds',
-		m: '%dm',
-		mm: '%dm',
-		h: '%dh',
-		hh: '%dh',
-		d: '%dd',
-		dd: '%dd',
-		M: '%dmo',
-		MM: '%dmo',
-		y: '%dy',
-		yy: '%dy'
+// Timeago config
+Vue.use(Timeago, {
+	name: 'Timeago',
+	locale: 'en',
+	converter(date, locale, { includeSeconds, addSuffix = true }) {
+		const distanceInWordsStrict = require('date-fns/distance_in_words_strict')
+		return distanceInWordsStrict(Date.now(), date, { locale, addSuffix, includeSeconds });
 	}
-})
+});
 
 // Set up Mastodon API
 const M = new Mastodon({
@@ -147,12 +138,7 @@ export default {
 			return string;
 		},
 		trimStatusArray: function() {
-			this.statuses = this.statuses.slice(0, 6);
-		}
-	},
-	filters: {
-		formatTimeAgo: function(timestamp) {
-			return Moment(timestamp).fromNow(true);
+			this.statuses = this.statuses.slice(0, 8);
 		}
 	}
 }
