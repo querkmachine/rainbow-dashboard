@@ -2,45 +2,49 @@
 	<ol class="mastodon">
 		<li class="mastodon__item" v-for="item in statuses" :key="item.id">
 			<article :class="['mastodon__status', item.reblog ? 'mastodon__status--boosted' : '']">
-				<div class="mastodon__avatar">
-					<img v-if="item.reblog" :src="item.reblog.account.avatar" :alt="item.reblog.account.acct">
-					<img :src="item.account.avatar" :alt="item.account.acct">
+				<div class="mastodon__metadata">
+					<div class="mastodon__avatar">
+						<img v-if="item.reblog" :src="item.reblog.account.avatar" :alt="item.reblog.account.acct">
+						<img :src="item.account.avatar" :alt="item.account.acct">
+					</div>
+					<div class="mastodon__timestamp">
+						{{ item.created_at | formatTimeAgo }}
+					</div>
 				</div>
 				<div class="mastodon__inner">
 					<header class="mastodon__header">
 						<div class="mastodon__account">
-							<template v-if="item.reblog">
-								<strong class="mastodon__account-name">
-									{{ item.reblog.account.display_name }}
+							<strong class="mastodon__account-name">
+								<template v-if="item.reblog">
+									<span v-html="customEmoji(item.reblog.account.display_name, item.reblog.account.emojis)"></span>
 									<small>{{ item.reblog.account.acct }}</small>
-								</strong>
-								<!-- <div class="mastodon__account-name mastodon__account-name--boosted-by">
-									Boosted by
-									{{ item.account.display_name }}
+								</template>
+								<template v-else>
+									<span v-html="customEmoji(item.account.display_name, item.account.emojis)"></span>
 									<small>{{ item.account.acct }}</small>
-								</div> -->
-							</template>
-							<template v-else>
-								<strong class="mastodon__account-name">
-									{{ item.account.display_name }}
-									<small>{{ item.account.acct }}</small>
-								</strong>
-							</template>
+								</template>
+							</strong>
 						</div>
-						<!-- <div class="mastodon__timestamp">
-							{{ item.created_at }}
-						</div> -->
 					</header>
 					<div class="mastodon__toot">
-						<div class="mastodon__toot-warning" v-if="item.sensitive && item.spoiler_text">{{ item.spoiler_text }}</div>
-						<div class="mastodon__toot-content" v-html="item.content"></div>
-						<div class="mastodon__toot-media" v-if="item.media_attachments">
+						<div class="mastodon__content-warning" v-if="item.sensitive && item.spoiler_text">{{ item.spoiler_text }}</div>
+						<div class="mastodon__content" v-html="customEmoji(item.content, item.emojis)"></div>
+						<div class="mastodon__media" v-if="item.reblog && item.reblog.media_attachments.length">
 							<ol>
-								<li v-for="media in item.media_attachments">
+								<li v-for="media in item.reblog.media_attachments" :key="media.id">
 									<img :src="media.remote_url" :alt="media.description">
 								</li>
 							</ol>
 						</div>
+						<div class="mastodon__media" v-else-if="item.media_attachments.length">
+							<ol>
+								<li v-for="media in item.media_attachments" :key="media.id">
+									<img :src="media.remote_url" :alt="media.description">
+								</li>
+							</ol>
+						</div>
+						<mastodon-card v-if="item.reblog && item.reblog.card" :data="item.reblog.card" />
+						<mastodon-card v-else-if="item.card" :data="item.card" />
 					</div>
 				</div>
 			</article>
@@ -50,12 +54,41 @@
 
 <script>
 import Mastodon from 'mastodon-api';
+import MastodonCard from './Mastodon-Card.vue';
+import Moment from 'moment';
+import Vue from 'vue';
+
+// Customise Moment timeago strings
+Moment.updateLocale('en', {
+	relativeTime: {
+		future: 'in %s',
+		past: '%s ago',
+		s: '%ds',
+		ss: '%ds',
+		m: '%dm',
+		mm: '%dm',
+		h: '%dh',
+		hh: '%dh',
+		d: '%dd',
+		dd: '%dd',
+		M: '%dmo',
+		MM: '%dmo',
+		y: '%dy',
+		yy: '%dy'
+	}
+})
+
+// Set up Mastodon API
 const M = new Mastodon({
 	access_token: process.env.VUE_APP_MASTODON_ACCESS_KEY,
 	api_url: process.env.VUE_APP_MASTODON_API_ENDPOINT
 });
+
 export default {
 	name: 'Mastodon',
+	components: {
+		MastodonCard
+	},
 	data() {
 		return {
 			error: false,
@@ -94,6 +127,17 @@ export default {
 					this.error = error;
 					this.initialized = false;
 				})
+		},
+		customEmoji: function(string, emojiArray) {
+			for(let i = 0; i < emojiArray.length; i++) {
+				string = string.replace(`:${emojiArray[i].shortcode}:`, `<img class="emoji" src="${emojiArray[i].static_url}" alt="${emojiArray[i].shortcode}">`);
+			}
+			return string;
+		}
+	},
+	filters: {
+		formatTimeAgo: function(timestamp) {
+			return Moment(timestamp).fromNow(true);
 		}
 	}
 }
@@ -102,7 +146,7 @@ export default {
 <style scoped>
 .mastodon {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
 	grid-gap: 1.5rem;
 	margin: 0;
 	padding: 0;
@@ -113,8 +157,13 @@ export default {
 }
 .mastodon__status {
 	display: flex;
-	border: 1px solid rgba(255, 255, 255, .2);
-	padding: .75rem;
+	/*border: 1px solid rgba(255, 255, 255, .2);
+	padding: .75rem;*/
+}
+.mastodon__metadata {
+	flex: 0 0 50px;
+	margin-right: .75rem;
+	text-align: center;
 }
 .mastodon__header {
 	display: flex;
@@ -123,16 +172,22 @@ export default {
 	margin-bottom: .75rem;
 }
 .mastodon__avatar {
-	flex: 0 0 50px;
 	width: 50px;
 	height: 50px;
-	margin-right: .75rem;
 	position: relative;
 }
 .mastodon__avatar img {
 	width: 100%;
 	height: 100%;
 	border-radius: .25rem;
+}
+.mastodon__timestamp {
+	margin-top: .75rem;
+	font-size: smaller;
+	opacity: .67;
+}
+.mastodon__inner {
+	flex-grow: 1;
 }
 .mastodon__status--boosted .mastodon__avatar img:nth-child(1) {
 	width: 80%;
@@ -162,22 +217,20 @@ export default {
 .mastodon__account-name--boosted-by {
 	font-weight: 400;
 }
-.mastodon__timestamp {
-
-}
 .mastodon__toot {
 
 }
-.mastodon__toot-warning {
+.mastodon__content-warning {
 
 }
-.mastodon__toot-content {
-	
+.mastodon__content {
+	line-height: 1.25;
 }
-.mastodon__toot-content > :first-child { margin-top: 0; }
-.mastodon__toot-content > :last-child { margin-bottom: 0; }
-.mastodon__toot-content a {
+.mastodon__content >>> a {
 	color: var(--highlight);
 }
-.mastodon__toot-media img { max-width: 100%; }
+.mastodon__content > :first-child { margin-top: 0; }
+.mastodon__content > :last-child { margin-bottom: 0; }
+
+.mastodon__media img { max-width: 100%; }
 </style>
