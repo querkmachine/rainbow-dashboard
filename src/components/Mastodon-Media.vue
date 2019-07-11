@@ -3,7 +3,7 @@
 		<ol class="mastodon-media__list">
 			<li class="mastodon-media__item" v-for="item in data" :key="item.id">
 				<template v-if="item.type === 'image'">
-					<img class="mastodon-media__image" :src="item.remote_url" :alt="item.description">
+					<img class="mastodon-media__image" :src="item.preview_url" :alt="item.description">
 				</template>
 				<template v-else-if="item.type === 'video'">
 					VIDEO GOES HERE
