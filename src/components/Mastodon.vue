@@ -27,7 +27,7 @@
 						</div>
 					</header>
 					<div class="mastodon__toot">
-						<div class="mastodon__content-warning" v-if="item.sensitive && item.spoiler_text">{{ item.spoiler_text }}</div>
+						<div class="mastodon__content-warning" v-if="item.spoiler_text"><mark>{{ item.spoiler_text }}</mark></div>
 						<div class="mastodon__content" v-html="customEmoji(item.content, item.emojis)"></div>
 						<mastodon-media v-if="item.reblog && item.reblog.media_attachments.length" :data="item.reblog.media_attachments" />
 						<mastodon-media v-else-if="item.media_attachments.length" :data="item.media_attachments" />
@@ -133,15 +133,14 @@ export default {
 
 <style scoped>
 .mastodon {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-	grid-gap: 1.5rem;
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
 }
-.mastodon__item {
-
+.mastodon__item + .mastodon__item {
+	margin-top: .75rem;
+	padding-top: .75rem;
+	border-top: 1px solid rgba(255, 255, 255, .2);
 }
 .mastodon__status {
 	display: flex;
@@ -209,7 +208,13 @@ export default {
 
 }
 .mastodon__content-warning {
-
+	margin-bottom: .25rem;
+}
+.mastodon__content-warning mark {
+	color: inherit;
+	background-color: var(--highlight);
+	box-shadow: -.25rem 0 0 0 var(--highlight), .25rem 0 0 0 var(--highlight);
+	box-decoration-break: clone;
 }
 .mastodon__content {
 	line-height: 1.25;
