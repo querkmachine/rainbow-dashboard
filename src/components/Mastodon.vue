@@ -69,7 +69,7 @@ Moment.updateLocale('en', {
 // Set up Mastodon API
 const M = new Mastodon({
 	access_token: process.env.VUE_APP_MASTODON_ACCESS_KEY,
-	api_url: process.env.VUE_APP_MASTODON_API_ENDPOINT
+	api_url: `https://${process.env.VUE_APP_MASTODON_API_ENDPOINT}`
 });
 
 export default {
@@ -86,7 +86,8 @@ export default {
 		}
 	},
 	mounted() {
-		this.updateStatuses();
+		this.loadInitialStatuses();
+		this.startListening();
 	},
 	methods: {
 		loadData: function() {
@@ -100,13 +101,14 @@ export default {
 		saveData: function() {
 			localStorage.setItem('RD_MASTODON_STATUSES', JSON.stringify(this.statuses));
 		},
-		updateStatuses: function() {
-			if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
+		loadInitialStatuses: function() {
+			//if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
 			console.log('Pinging the API...')
 			M
 				.get('timelines/home', {})
 				.then((response) => {
 					this.statuses = response.data;
+					this.trimStatusArray();
 					this.error = false;
 					this.initialized = true;
 					this.saveData();
@@ -116,11 +118,50 @@ export default {
 					this.initialized = false;
 				})
 		},
+		startListening: function() {
+			console.log('now listening...')
+			// NOTE: Needs CORS change to work
+			// const listener = M.stream('streaming/user');
+			// listener.on('message', (status) => {
+			// 	console.log('message', status);
+			// });
+			// listener.on('error', (error) => {
+			// 	this.error = error;
+			// });
+			const socket = new WebSocket(`wss://${process.env.VUE_APP_MASTODON_API_ENDPOINT}streaming?access_token=${process.env.VUE_APP_MASTODON_ACCESS_KEY}&stream=user`);
+			socket.onopen = (event) => {
+				console.log('onopen', event);
+			}
+			socket.onmessage = (event) => {
+				console.log('onmessage', event.data.type, JSON.parse(event.data.payload));
+				if(event.data.type === 'update') {
+					this.statuses.unshift(JSON.parse(event.data.payload));
+					this.trimStatusArray();
+				}
+				else if(event.data.type === 'delete') {
+					const index = this.statuses.findIndex((status) => {
+						return status.id === event.data.payload;
+					});
+					if(index !== -1) {
+						this.statuses.splice(index, 5);
+					}
+				}
+			}
+			socket.onerror = (event) => {
+				console.log('onerror', event);
+			}
+			socket.onclose = (event) => {
+				console.log('onclose', event);
+			}
+		},
 		customEmoji: function(string, emojiArray) {
 			for(let i = 0; i < emojiArray.length; i++) {
 				string = string.replace(`:${emojiArray[i].shortcode}:`, `<img class="emoji" src="${emojiArray[i].static_url}" alt="${emojiArray[i].shortcode}">`);
 			}
 			return string;
+		},
+		trimStatusArray: function() {
+			this.statuses = this.statuses.slice(0, 2);
 		}
 	},
 	filters: {
