@@ -23,7 +23,16 @@ export default {
 		Mastodon
 	},
 	mounted() {
-		
+		this.calculateHighlight();
+		setInterval(() => {
+			this.calculateHighlight();
+		}, 1000);
+	},
+	methods: {
+		calculateHighlight: function() {
+			const highlightColor = `hsl(${ new Date().getTime() / 1000 }deg, 79%, 51%)`;
+			document.documentElement.style.setProperty('--highlight', highlightColor);
+		}
 	}
 }
 </script>
