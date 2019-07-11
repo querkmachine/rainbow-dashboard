@@ -16,7 +16,7 @@ Neat, eh?
 
 - [x] A clock
 - [x] Philips Hue integration
-- [ ] Mastodon feed integration
+- [x] Mastodon feed integration
 - [x] Dark Sky integration
 - [ ] Bus times integration
 - [ ] Google Calendar integration
@@ -33,6 +33,10 @@ VUE_APP_HUE_API_KEY=
 
 # Dark Sky integration
 VUE_APP_DARKSKY_API_KEY=
+
+# Mastodon integration
+VUE_APP_MASTODON_API_ENDPOINT=
+VUE_APP_MASTODON_ACCESS_KEY=
 ```
 
 ### Those terminal commands in full
