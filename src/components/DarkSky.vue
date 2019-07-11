@@ -167,7 +167,6 @@ export default {
 
 <style scoped>
 .dark-sky {
-	margin: 2rem;
 	display: grid;
 	grid-template-columns: 1fr 4fr;
 	grid-gap: 1.5rem;

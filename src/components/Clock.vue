@@ -54,6 +54,9 @@ export default {
 	background-color: transparent;
 	appearance: none;
 }
+.clock__progress + .clock__progress {
+	margin-top: -1px;
+}
 .clock__progress::-webkit-progress-bar {
 	background-color: transparent;
 }
