@@ -82,7 +82,8 @@ export default {
 		return {
 			error: false,
 			initialized: false,
-			statuses: []
+			statuses: [],
+			socket: {}
 		}
 	},
 	mounted() {
@@ -102,8 +103,7 @@ export default {
 			localStorage.setItem('RD_MASTODON_STATUSES', JSON.stringify(this.statuses));
 		},
 		loadInitialStatuses: function() {
-			//if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
-			console.log('Pinging the API...')
+			if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
 			M
 				.get('timelines/home', {})
 				.then((response) => {
@@ -119,39 +119,25 @@ export default {
 				})
 		},
 		startListening: function() {
-			console.log('now listening...')
-			// NOTE: Needs CORS change to work
-			// const listener = M.stream('streaming/user');
-			// listener.on('message', (status) => {
-			// 	console.log('message', status);
-			// });
-			// listener.on('error', (error) => {
-			// 	this.error = error;
-			// });
-			const socket = new WebSocket(`wss://${process.env.VUE_APP_MASTODON_API_ENDPOINT}streaming?access_token=${process.env.VUE_APP_MASTODON_ACCESS_KEY}&stream=user`);
-			socket.onopen = (event) => {
-				console.log('onopen', event);
-			}
-			socket.onmessage = (event) => {
-				console.log('onmessage', event.data.type, JSON.parse(event.data.payload));
-				if(event.data.type === 'update') {
-					this.statuses.unshift(JSON.parse(event.data.payload));
+			this.socket = new WebSocket(`wss://${process.env.VUE_APP_MASTODON_API_ENDPOINT}streaming?access_token=${process.env.VUE_APP_MASTODON_ACCESS_KEY}&stream=user`);
+			this.socket.onmessage = (event) => {
+				const data = JSON.parse(event.data);
+				if(data.event === 'update') {
+					const payload = JSON.parse(data.payload);
+					this.statuses.unshift(payload);
 					this.trimStatusArray();
 				}
-				else if(event.data.type === 'delete') {
+				else if(data.event === 'delete') {
 					const index = this.statuses.findIndex((status) => {
-						return status.id === event.data.payload;
+						return status.id === data.payload;
 					});
 					if(index !== -1) {
-						this.statuses.splice(index, 5);
+						this.statuses.splice(index, 1);
 					}
 				}
 			}
-			socket.onerror = (event) => {
-				console.log('onerror', event);
-			}
-			socket.onclose = (event) => {
-				console.log('onclose', event);
+			this.socket.onclose = () => {
+				this.startListening();
 			}
 		},
 		customEmoji: function(string, emojiArray) {
@@ -161,7 +147,7 @@ export default {
 			return string;
 		},
 		trimStatusArray: function() {
-			this.statuses = this.statuses.slice(0, 2);
+			this.statuses = this.statuses.slice(0, 6);
 		}
 	},
 	filters: {

@@ -6,7 +6,9 @@
 					<img class="mastodon-media__image" :src="item.preview_url" :alt="item.description">
 				</template>
 				<template v-else-if="item.type === 'video'">
-					VIDEO GOES HERE
+					<video class="mastodon-media__video" :poster="item.preview_url" autoplay muted loop>
+						<source :src="item.url">
+					</video>
 				</template>
 				<template v-else>
 					Unsupported media type. Fix it, Kim, fix it.
@@ -79,7 +81,8 @@ export default {
 .mastodon-media__item:nth-child(2) { grid-area: b; }
 .mastodon-media__item:nth-child(3) { grid-area: c; }
 .mastodon-media__item:nth-child(4) { grid-area: d; }
-.mastodon-media__image {
+.mastodon-media__image,
+.mastodon-media__video {
 	max-width: 100%;
 	max-height: 100%;
 }
