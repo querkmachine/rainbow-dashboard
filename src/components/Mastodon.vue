@@ -29,21 +29,9 @@
 					<div class="mastodon__toot">
 						<div class="mastodon__content-warning" v-if="item.sensitive && item.spoiler_text">{{ item.spoiler_text }}</div>
 						<div class="mastodon__content" v-html="customEmoji(item.content, item.emojis)"></div>
-						<div class="mastodon__media" v-if="item.reblog && item.reblog.media_attachments.length">
-							<ol>
-								<li v-for="media in item.reblog.media_attachments" :key="media.id">
-									<img :src="media.remote_url" :alt="media.description">
-								</li>
-							</ol>
-						</div>
-						<div class="mastodon__media" v-else-if="item.media_attachments.length">
-							<ol>
-								<li v-for="media in item.media_attachments" :key="media.id">
-									<img :src="media.remote_url" :alt="media.description">
-								</li>
-							</ol>
-						</div>
-						<mastodon-card v-if="item.reblog && item.reblog.card" :data="item.reblog.card" />
+						<mastodon-media v-if="item.reblog && item.reblog.media_attachments.length" :data="item.reblog.media_attachments" />
+						<mastodon-media v-else-if="item.media_attachments.length" :data="item.media_attachments" />
+						<mastodon-card v-else-if="item.reblog && item.reblog.card" :data="item.reblog.card" />
 						<mastodon-card v-else-if="item.card" :data="item.card" />
 					</div>
 				</div>
@@ -55,8 +43,8 @@
 <script>
 import Mastodon from 'mastodon-api';
 import MastodonCard from './Mastodon-Card.vue';
+import MastodonMedia from './Mastodon-Media.vue';
 import Moment from 'moment';
-import Vue from 'vue';
 
 // Customise Moment timeago strings
 Moment.updateLocale('en', {
@@ -87,7 +75,8 @@ const M = new Mastodon({
 export default {
 	name: 'Mastodon',
 	components: {
-		MastodonCard
+		MastodonCard,
+		MastodonMedia
 	},
 	data() {
 		return {
@@ -117,7 +106,6 @@ export default {
 			M
 				.get('timelines/home', {})
 				.then((response) => {
-					console.log(response);
 					this.statuses = response.data;
 					this.error = false;
 					this.initialized = true;
@@ -232,6 +220,4 @@ export default {
 .mastodon__content >>> a .invisible:first-child { display: none; }
 .mastodon__content > :first-child { margin-top: 0; }
 .mastodon__content > :last-child { margin-bottom: 0; }
-
-.mastodon__media img { max-width: 100%; }
 </style>
