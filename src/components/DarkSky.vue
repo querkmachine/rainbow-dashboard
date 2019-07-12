@@ -27,7 +27,7 @@
 							<div class="dark-sky__forecast-graph-rain" :style="'height:' + ((100 / next12Hours.graph.maxPrecipitation) * bar.precipIntensity) + '%'"></div>
 							<div class="dark-sky__forecast-graph-details" :style="'bottom:' + forecastGraphPosition(bar.temperature, next12Hours.graph.minTemperature, next12Hours.graph.maxTemperature) + '%'">
 								<div class="dark-sky__forecast-graph-icon">
-									<skycon :condition="bar.icon" width="50" height="50" color="white" />
+									<skycon :condition="bar.icon" width="90" height="90" color="white" />
 								</div>
 								<div class="dark-sky__forecast-graph-temperature">{{ round(bar.temperature) }}&deg;</div>
 							</div>
