@@ -177,14 +177,12 @@ export default {
 	);
 }
 .mastodon__item + .mastodon__item {
-	margin-top: .75rem;
-	padding-top: .75rem;
-	border-top: 1px solid rgba(255, 255, 255, .2);
+	margin-top: -1px;
 }
 .mastodon__status {
 	display: flex;
-	/*border: 1px solid rgba(255, 255, 255, .2);
-	padding: .75rem;*/
+	border: 1px solid rgba(255, 255, 255, .2);
+	padding: .75rem;
 }
 .mastodon__metadata {
 	flex: 0 0 50px;
