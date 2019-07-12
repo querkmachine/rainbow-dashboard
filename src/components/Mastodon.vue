@@ -8,7 +8,7 @@
 						<img :src="item.account.avatar" :alt="item.account.acct">
 					</div>
 					<div class="mastodon__timestamp">
-						<Timeago :datetime="item.created_at" :auto-update="30" />
+						<Timeago :datetime="item.created_at" :auto-update="1" />
 					</div>
 				</div>
 				<div class="mastodon__inner">
