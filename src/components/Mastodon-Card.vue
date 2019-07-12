@@ -1,6 +1,6 @@
 <template>
 	<div class="mastodon-card">
-		<img class="mastodon-card__media" :src="data.image" :alt="data.title" :width="data.width" :height="data.height">
+		<img class="mastodon-card__media" v-if="data.image" :src="data.image" :alt="data.title" :width="data.width" :height="data.height">
 		<strong class="mastodon-card__title">{{ data.title }}</strong>
 		<div class="mastodon-card__content" v-if="data.description">
 			<p>{{ data.description }}</p>
