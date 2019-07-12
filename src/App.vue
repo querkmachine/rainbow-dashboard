@@ -53,6 +53,7 @@ body {
 	background-color: #000;
 	font-family: 'Inter', sans-serif;
 	overflow: hidden;
+	cursor: none;
 }
 @supports (font-variation-settings: normal) {
 	html { font-family: 'Inter var', sans-serif; }
