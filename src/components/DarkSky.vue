@@ -141,9 +141,12 @@ export default {
 			}
 		},
 		next12HoursGraphDetails: function(defaultPrecipitation = 9) {
-			const maxPrecipitation = this.forecastData.daily.data[0].precipIntensityMax;
-			const maxTemperature = this.forecastData.daily.data[0].temperatureMax;
-			const minTemperature = this.forecastData.daily.data[0].temperatureMin;
+			const today = this.forecastData.daily.data[0];
+			const tomorrow = this.forecastData.daily.data[1];
+			const afterNoon = new Date().getHours() >= 12 ? true : false;
+			const maxPrecipitation = afterNoon ? Math.max(today.precipIntensityMax, tomorrow.precipIntensityMax) : today.precipIntensityMax;
+			const maxTemperature = afterNoon ? Math.max(today.temperatureMax, tomorrow.temperatureMax) : today.temperatureMax;
+			const minTemperature = afterNoon ? Math.min(today.temperatureMin, tomorrow.temperatureMin) : today.temperatureMin;
 			return {
 				maxTemperature: maxTemperature,
 				minTemperature: minTemperature,
@@ -152,8 +155,8 @@ export default {
 		},
 		forecastGraphPosition: function(temperature, minTemperature, maxTemperature) {
 			// Not 0-100 to avoid overlapping time label or going off the bottom of the bar
-			const minPercentage = 10;
-			const maxPercentage = 65; 
+			const minPercentage = 7.5;
+			const maxPercentage = 69; // nice 
 			return minPercentage + (temperature - minTemperature) / (maxTemperature - minTemperature) * (maxPercentage - minPercentage);
 		},
 		round: function(num) {
