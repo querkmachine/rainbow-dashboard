@@ -3,7 +3,6 @@
 		<template v-if="error">ERROR: {{ error }}</template>
 		<template v-if="initialized">
 			<section v-if="nextHour" class="dark-sky__section">
-				<header class="dark-sky__section-header">Next hour</header>
 				<div class="dark-sky__summary">{{ nextHour.summary }}</div>
 				<div class="dark-sky__temperature">
 					<span class="dark-sky__temperature-main">
@@ -21,7 +20,6 @@
 				</div>
 			</section>
 			<section class="dark-sky__section">
-				<header class="dark-sky__section-header">Forecast</header>
 				<div class="dark-sky__forecast-graph">
 					<ol class="dark-sky__forecast-graph-list">
 						<li v-for="bar in next12Hours.graph.data" :key="bar.time" class="dark-sky__forecast-graph-bar">
