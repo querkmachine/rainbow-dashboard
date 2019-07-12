@@ -3,7 +3,10 @@
 		<template v-if="error">ERROR: {{ error }}</template>
 		<template v-if="initialized">
 			<section v-if="nextHour" class="dark-sky__section">
-				<div class="dark-sky__summary">{{ nextHour.summary }}</div>
+				<div class="dark-sky__summary">
+					{{ nextHour.summary }}
+					{{ next12Hours.summary }}
+				</div>
 				<div class="dark-sky__temperature">
 					<span class="dark-sky__temperature-main">
 						<small>Feels like</small>
