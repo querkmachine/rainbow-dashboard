@@ -72,10 +72,11 @@ body {
 .wrapper__inner {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: repeat(2, 1fr);
+	grid-template-rows: repeat(3, 1fr);
 	grid-gap: 3rem;
 	grid-template-areas:
 		'mastodon darksky darksky'
+		'mastodon . .'
 		'mastodon phue phue'
 	;
 	height: calc(100vh - 3rem);
@@ -89,5 +90,5 @@ body {
 }
 .mastodon { grid-area: mastodon; }
 .dark-sky { grid-area: darksky; }
-.philips-hue { grid-area: phue; }
+.philips-hue { grid-area: phue; align-self: end; }
 </style>

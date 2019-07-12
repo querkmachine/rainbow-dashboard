@@ -123,7 +123,7 @@ export default {
 .philips-hue {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-	grid-auto-rows: minmax(100px, 1fr);
+	grid-auto-rows: 120px;
 	grid-gap: 1.5rem;
 	margin: 0;
 	padding: 0;
