@@ -79,7 +79,7 @@ body {
 		'mastodon phue phue'
 	;
 	height: calc(100vh - 3rem);
-	padding: 1rem;
+	padding-top: 1rem;
 }
 .clock { 
 	width: 100%;

@@ -168,6 +168,8 @@ export default {
 	display: grid;
 	grid-template-columns: 1fr 4fr;
 	grid-gap: 1.5rem;
+	padding: .75rem;
+	border: 1px solid rgba(255, 255, 255, .2);
 }
 .dark-sky__section {
 
