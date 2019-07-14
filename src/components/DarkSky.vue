@@ -156,7 +156,7 @@ export default {
 		forecastGraphPosition: function(temperature, minTemperature, maxTemperature) {
 			// Not 0-100 to avoid overlapping time label or going off the bottom of the bar
 			const minPercentage = 7.5;
-			const maxPercentage = 69; // nice 
+			const maxPercentage = 67;
 			return minPercentage + (temperature - minTemperature) / (maxTemperature - minTemperature) * (maxPercentage - minPercentage);
 		},
 		round: function(num) {
