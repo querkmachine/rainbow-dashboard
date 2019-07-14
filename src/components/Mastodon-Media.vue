@@ -43,6 +43,7 @@ export default {
 }
 .mastodon-media__list {
 	display: grid;
+	grid-gap: .5rem;
 	width: 100%;
 	height: 100%;
 	margin: 0;
