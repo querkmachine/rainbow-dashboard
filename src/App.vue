@@ -1,5 +1,6 @@
 <template>
 	<div id="app" class="wrapper">
+		<DynamicHighlight />
 		<Clock />
 		<div class="wrapper__inner">
 			<Mastodon />
@@ -12,6 +13,7 @@
 <script>
 import Clock from './components/Clock.vue';
 import DarkSky from './components/DarkSky.vue';
+import DynamicHighlight from './components/DynamicHighlight.vue';
 import PhilipsHue from './components/PhilipsHue.vue';
 import Mastodon from './components/Mastodon.vue';
 export default {
@@ -19,11 +21,9 @@ export default {
 	components: {
 		Clock,
 		DarkSky,
+		DynamicHighlight,
 		PhilipsHue,
 		Mastodon
-	},
-	mounted() {
-		
 	}
 }
 </script>
