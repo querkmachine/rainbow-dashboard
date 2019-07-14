@@ -45,6 +45,7 @@ import Timeago from 'vue-timeago';
 import Mastodon from 'mastodon-api';
 import MastodonCard from './Mastodon-Card.vue';
 import MastodonMedia from './Mastodon-Media.vue';
+import Twemoji from 'twemoji';
 import Vue from 'vue';
 
 // Timeago config
@@ -80,6 +81,12 @@ export default {
 	mounted() {
 		this.loadInitialStatuses();
 		this.startListening();
+	},
+	updated() {
+		Twemoji.parse(document.body, {
+			folder: 'svg',
+			ext: '.svg'
+		});
 	},
 	methods: {
 		loadData: function() {

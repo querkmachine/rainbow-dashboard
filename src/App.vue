@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import Twemoji from 'twemoji';
 import Clock from './components/Clock.vue';
 import DarkSky from './components/DarkSky.vue';
 import PhilipsHue from './components/PhilipsHue.vue';
@@ -24,10 +23,7 @@ export default {
 		Mastodon
 	},
 	mounted() {
-		Twemoji.parse(document.body, {
-			folder: 'svg',
-			ext: '.svg'
-		});
+		
 	}
 }
 </script>
