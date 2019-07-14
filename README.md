@@ -21,7 +21,7 @@ Neat, eh?
 - [ ] Bus times integration
 - [ ] Google Calendar integration
 - [ ] Spotify/now playing integration
-- [ ] Cycle accent colour over time maybe?
+- [x] Cycle accent colour over time maybe?
 - [ ] Actually do the cool remote control thing 2.0 was meant to do
 
 ### `.env` variables that aren't in source control
