@@ -27,7 +27,7 @@
 						</div>
 					</header>
 					<div class="mastodon__toot">
-						<div class="mastodon__content-warning" v-if="item.spoiler_text"><mark>{{ item.spoiler_text }}</mark></div>
+						<div class="mastodon__content-warning" v-if="item.spoiler_text"><mark v-html="customEmoji(item.spoiler_text, item.emojis)"></mark></div>
 						<div class="mastodon__content" v-html="customEmoji(item.content, item.emojis)"></div>
 						<mastodon-media v-if="item.reblog && item.reblog.media_attachments.length" :data="item.reblog.media_attachments" />
 						<mastodon-media v-else-if="item.media_attachments.length" :data="item.media_attachments" />
