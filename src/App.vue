@@ -2,9 +2,10 @@
 	<div id="app" class="wrapper">
 		<Clock />
 		<div class="wrapper__inner">
-			<Mastodon />
+			<Spotify />
+			<!-- <Mastodon />
 			<DarkSky :lat="51.457357" :lng="-2.618500" />
-			<PhilipsHue />
+			<PhilipsHue /> -->
 		</div>
 	</div>
 </template>
@@ -15,13 +16,15 @@ import Clock from './components/Clock.vue';
 import DarkSky from './components/DarkSky.vue';
 import PhilipsHue from './components/PhilipsHue.vue';
 import Mastodon from './components/Mastodon.vue';
+import Spotify from './components/Spotify.vue';
 export default {
 	name: 'app',
 	components: {
 		Clock,
 		DarkSky,
 		PhilipsHue,
-		Mastodon
+		Mastodon,
+		Spotify
 	},
 	mounted() {
 		Twemoji.parse(document.body, {
@@ -53,7 +56,7 @@ body {
 	background-color: #000;
 	font-family: 'Inter', sans-serif;
 	overflow: hidden;
-	cursor: none;
+	/*cursor: none;*/
 }
 @supports (font-variation-settings: normal) {
 	html { font-family: 'Inter var', sans-serif; }
