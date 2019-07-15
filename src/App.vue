@@ -75,8 +75,8 @@ body {
 	grid-gap: 3rem;
 	grid-template-areas:
 		'mastodon darksky darksky'
-		'mastodon . busses'
-		'mastodon phue phue'
+		'mastodon phue busses'
+		'mastodon phue busses'
 	;
 	height: calc(100vh - 3rem);
 	padding-top: 1rem;
@@ -89,6 +89,6 @@ body {
 }
 .mastodon { grid-area: mastodon; }
 .dark-sky { grid-area: darksky; }
-.philips-hue { grid-area: phue; align-self: end; }
+.philips-hue { grid-area: phue; }
 .bus-times { grid-area: busses; }
 </style>
