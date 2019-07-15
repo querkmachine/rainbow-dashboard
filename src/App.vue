@@ -5,6 +5,7 @@
 		<div class="wrapper__inner">
 			<Mastodon />
 			<DarkSky :lat="51.457357" :lng="-2.618500" />
+			<BusTimes />
 			<PhilipsHue />
 		</div>
 	</div>
@@ -12,6 +13,7 @@
 
 <script>
 import Clock from './components/Clock.vue';
+import BusTimes from './components/BusTimes.vue';
 import DarkSky from './components/DarkSky.vue';
 import DynamicHighlight from './components/DynamicHighlight.vue';
 import PhilipsHue from './components/PhilipsHue.vue';
@@ -19,6 +21,7 @@ import Mastodon from './components/Mastodon.vue';
 export default {
 	name: 'app',
 	components: {
+		BusTimes,
 		Clock,
 		DarkSky,
 		DynamicHighlight,
@@ -72,7 +75,7 @@ body {
 	grid-gap: 3rem;
 	grid-template-areas:
 		'mastodon darksky darksky'
-		'mastodon . .'
+		'mastodon . busses'
 		'mastodon phue phue'
 	;
 	height: calc(100vh - 3rem);
@@ -87,4 +90,5 @@ body {
 .mastodon { grid-area: mastodon; }
 .dark-sky { grid-area: darksky; }
 .philips-hue { grid-area: phue; align-self: end; }
+.bus-times { grid-area: busses; }
 </style>
