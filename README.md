@@ -18,7 +18,7 @@ Neat, eh?
 - [x] Philips Hue integration
 - [x] Mastodon feed integration
 - [x] Dark Sky integration
-- [ ] Bus times integration
+- [x] Bus times integration
 - [ ] Google Calendar integration
 - [ ] Spotify/now playing integration
 - [x] Cycle accent colour over time maybe?
@@ -37,6 +37,11 @@ VUE_APP_DARKSKY_API_KEY=
 # Mastodon integration
 VUE_APP_MASTODON_API_ENDPOINT=
 VUE_APP_MASTODON_ACCESS_KEY=
+
+# Transport API (bus times) integration
+VUE_APP_BUSTIMES_APP_ID=
+VUE_APP_BUSTIMES_API_KEY=
+VUE_APP_BUSTIMES_STOP_ATCO_CODE=
 ```
 
 ### Those terminal commands in full
