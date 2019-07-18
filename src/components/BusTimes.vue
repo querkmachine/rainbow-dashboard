@@ -8,18 +8,22 @@
 				</template>
 			</header>
 			<ol class="bus-times__list">
-				<li class="bus-times__item" v-for="item in stopInfo.departures.all" :key="item.id">
-					<div class="bus-times__line">{{ item.line_name }}</div>
-					<div class="bus-times__destination">{{ item.direction }}</div>
-					<div class="bus-times__due">
-						<template v-if="item.expected_departure_time && item.expected_departure_date">
+				<template v-for="item in stopInfo.departures.all">
+					<li class="bus-times__item" v-if="(item.expected_departure_date && item.expected_departure_time) && !timeInPast(item.expected_departure_date, item.expected_departure_time)" :key="item.id">
+						<div class="bus-times__line">{{ item.line_name }}</div>
+						<div class="bus-times__destination">{{ item.direction }}</div>
+						<div class="bus-times__due">
 							<Timeago :datetime="makeISODate(item.expected_departure_date, item.expected_departure_time)" :auto-update="1" />
-						</template>
-						<template v-else>
+						</div>
+					</li>
+					<li class="bus-times__item" v-else-if="!timeInPast(item.date, item.aimed_departure_time)" :key="item.id">
+						<div class="bus-times__line">{{ item.line_name }}</div>
+						<div class="bus-times__destination">{{ item.direction }}</div>
+						<div class="bus-times__due">
 							{{ item.aimed_departure_time }}
-						</template>
-					</div>
-				</li>
+						</div>
+					</li>
+				</template>
 			</ol>
 		</template>
 	</section>
@@ -88,6 +92,14 @@ export default {
 		},
 		makeISODate: function(date, time) {
 			return new Date(`${date} ${time}`).toISOString();
+		},
+		timeInPast: function(date, time) {
+			const busTime = new Date(`${date} ${time}`).getTime();
+			const now = new Date().getTime();
+			if(busTime <= now) {
+				return true;
+			}
+			return false;
 		}
 	}
 }
@@ -127,6 +139,7 @@ export default {
 .bus-times__due {
 	margin-left: auto;
 	font-size: smaller;
+	text-align: right;
 	opacity: .67;
 }
 </style>
