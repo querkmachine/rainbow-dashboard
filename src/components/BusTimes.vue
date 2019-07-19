@@ -42,11 +42,16 @@ Vue.use(Timeago, {
 
 export default {
 	name: 'BusTimes',
+	props: {
+		reloadInterval: {
+			type: Number,
+			default: 600000
+		}
+	},
 	data() {
 		return {
 			initialized: false,
 			error: false,
-			lastRequest: null,
 			stopInfo: {}
 		}
 	},
@@ -54,7 +59,7 @@ export default {
 		this.updateTimetable();
 		setInterval(() => {
 			this.updateTimetable();
-		}, 1000 * 60 * 5);
+		}, this.reloadInterval);
 	},
 	methods: {
 		loadData: function() {
