@@ -280,6 +280,7 @@ export default {
 	margin-top: auto;
 	padding: .25rem;
 	position: relative;
+	z-index: 1;
 	font-feature-settings: 'tnum' 1;
 	font-size: small;
 	font-weight: 600;
@@ -298,6 +299,7 @@ export default {
 	padding: .5rem;
 	position: absolute;
 	left: 0;
+	z-index: 1;
 	transition: bottom .3333s ease;
 }
 .dark-sky__forecast-graph-icon {
