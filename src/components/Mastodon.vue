@@ -8,7 +8,7 @@
 						<img :src="item.account.avatar" :alt="item.account.acct">
 					</div>
 					<div class="mastodon__timestamp">
-						<Timeago :datetime="item.created_at" :auto-update="1" />
+						<Timeago :datetime="item.created_at" :auto-update="1" :dictionary="timeagoDictionary" />
 					</div>
 				</div>
 				<div class="mastodon__inner">
@@ -41,22 +41,11 @@
 </template>
 
 <script>
-import Timeago from 'vue-timeago';
 import Mastodon from 'mastodon-api';
 import MastodonCard from './Mastodon-Card.vue';
 import MastodonMedia from './Mastodon-Media.vue';
+import Timeago from './Timeago.vue';
 import Twemoji from 'twemoji';
-import Vue from 'vue';
-
-// Timeago config
-Vue.use(Timeago, {
-	name: 'Timeago',
-	locale: 'en',
-	converter(date, locale, { includeSeconds, addSuffix = true }) {
-		const distanceInWordsStrict = require('date-fns/distance_in_words_strict')
-		return distanceInWordsStrict(Date.now(), date, { locale, addSuffix, includeSeconds });
-	}
-});
 
 // Set up Mastodon API
 const M = new Mastodon({
@@ -68,14 +57,32 @@ export default {
 	name: 'Mastodon',
 	components: {
 		MastodonCard,
-		MastodonMedia
+		MastodonMedia,
+		Timeago
 	},
 	data() {
 		return {
 			error: false,
 			initialized: false,
 			statuses: [],
-			socket: {}
+			socket: {},
+			timeagoDictionary: {
+				now: ['now', 'now'],
+				second: ['%ss', 'in %ss'],
+				seconds: ['%ss', 'in %ss'],
+				minute: ['%sm', 'in %sm'],
+				minutes: ['%sm', 'in %sm'],
+				hour: ['%sh', 'in %sh'],
+				hours: ['%sh', 'in %sh'],
+				day: ['%sd', 'in %sd'],
+				days: ['%sd', 'in %sd'],
+				week: ['%swk', 'in %swk'],
+				weeks: ['%swk', 'in %swk'],
+				month: ['%smo', 'in %smo'],
+				months: ['%smo', 'in %smo'],
+				year: ['%syr', 'in %syr'],
+				years: ['%syr', 'in %syr']
+			}
 		}
 	},
 	mounted() {
@@ -215,6 +222,7 @@ export default {
 .mastodon__timestamp {
 	margin-top: .75rem;
 	font-size: smaller;
+	font-feature-settings: 'tnum' 1;
 	opacity: .67;
 }
 .mastodon__inner {

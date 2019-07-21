@@ -20,7 +20,7 @@
 						<div class="bus-times__line">{{ item.line_name }}</div>
 						<div class="bus-times__destination">{{ item.direction }}</div>
 						<div class="bus-times__due">
-							{{ item.aimed_departure_time }}
+							<Timeago :datetime="makeISODate(item.date, item.aimed_departure_time)" :auto-update="1" />
 						</div>
 					</li>
 				</template>
@@ -32,17 +32,13 @@
 <script>
 import Axios from 'axios';
 import Moment from 'moment';
-import Timeago from 'vue-timeago';
-import Vue from 'vue';
-
-// Timeago config
-Vue.use(Timeago, {
-	name: 'Timeago',
-	locale: 'en'
-});
+import Timeago from './Timeago.vue';
 
 export default {
 	name: 'BusTimes',
+	components: {
+		Timeago
+	},
 	props: {
 		reloadInterval: {
 			type: Number,
@@ -144,6 +140,7 @@ export default {
 .bus-times__due {
 	margin-left: auto;
 	font-size: smaller;
+	font-feature-settings: 'tnum' 1;
 	text-align: right;
 	opacity: .67;
 }
