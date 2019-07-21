@@ -46,7 +46,6 @@ import MastodonCard from './Mastodon-Card.vue';
 import MastodonMedia from './Mastodon-Media.vue';
 import Timeago from './Timeago.vue';
 import Twemoji from 'twemoji';
-import Vue from 'vue';
 
 // Set up Mastodon API
 const M = new Mastodon({

@@ -33,7 +33,6 @@
 import Axios from 'axios';
 import Moment from 'moment';
 import Timeago from './Timeago.vue';
-import Vue from 'vue';
 
 export default {
 	name: 'BusTimes',
