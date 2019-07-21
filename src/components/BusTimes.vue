@@ -9,14 +9,14 @@
 			</header>
 			<ol class="bus-times__list">
 				<template v-for="item in stopInfo.departures.all">
-					<li class="bus-times__item" v-if="(item.expected_departure_date && item.expected_departure_time) && !timeInPast(item.expected_departure_date, item.expected_departure_time)" :key="item.id">
+					<li class="bus-times__item" v-if="(item.expected_departure_date && item.expected_departure_time) && makeUnixTime(item.expected_departure_date, item.expected_departure_time) > unixTime" :key="item.id">
 						<div class="bus-times__line">{{ item.line_name }}</div>
 						<div class="bus-times__destination">{{ item.direction }}</div>
 						<div class="bus-times__due">
 							<Timeago :datetime="makeISODate(item.expected_departure_date, item.expected_departure_time)" :auto-update="1" />
 						</div>
 					</li>
-					<li class="bus-times__item" v-else-if="!timeInPast(item.date, item.aimed_departure_time)" :key="item.id">
+					<li class="bus-times__item" v-else-if="makeUnixTime(item.date, item.aimed_departure_time) > unixTime" :key="item.id">
 						<div class="bus-times__line">{{ item.line_name }}</div>
 						<div class="bus-times__destination">{{ item.direction }}</div>
 						<div class="bus-times__due">
@@ -31,6 +31,7 @@
 
 <script>
 import Axios from 'axios';
+import Moment from 'moment';
 import Timeago from 'vue-timeago';
 import Vue from 'vue';
 
@@ -52,6 +53,7 @@ export default {
 		return {
 			initialized: false,
 			error: false,
+			unixTime: Moment().unix(),
 			stopInfo: {}
 		}
 	},
@@ -60,6 +62,9 @@ export default {
 		setInterval(() => {
 			this.updateTimetable();
 		}, this.reloadInterval);
+		setInterval(() => {
+			this.unixTime = Moment().unix()
+		}, 1000);
 	},
 	methods: {
 		loadData: function() {
@@ -96,15 +101,10 @@ export default {
 				});
 		},
 		makeISODate: function(date, time) {
-			return new Date(`${date} ${time}`).toISOString();
+			return Moment(`${date} ${time}`).toISOString();
 		},
-		timeInPast: function(date, time) {
-			const busTime = new Date(`${date} ${time}`).getTime();
-			const now = new Date().getTime();
-			if(busTime <= now) {
-				return true;
-			}
-			return false;
+		makeUnixTime: function(date, time) {
+			return Moment(`${date} ${time}`).unix();
 		}
 	}
 }
