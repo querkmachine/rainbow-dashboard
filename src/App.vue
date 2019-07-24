@@ -4,7 +4,7 @@
 		<Clock />
 		<div class="wrapper__inner">
 			<Mastodon />
-			<DarkSky :lat="51.457357" :lng="-2.618500" />
+			<DarkSky />
 			<BusTimes />
 			<PhilipsHue />
 		</div>
