@@ -6,27 +6,30 @@
 			<Mastodon />
 			<DarkSky />
 			<BusTimes />
+			<Todoist />
 			<PhilipsHue />
 		</div>
 	</div>
 </template>
 
 <script>
-import Clock from './components/Clock.vue';
-import BusTimes from './components/BusTimes.vue';
-import DarkSky from './components/DarkSky.vue';
 import DynamicHighlight from './components/DynamicHighlight.vue';
-import PhilipsHue from './components/PhilipsHue.vue';
+import Clock from './components/Clock.vue';
 import Mastodon from './components/Mastodon.vue';
+import DarkSky from './components/DarkSky.vue';
+import BusTimes from './components/BusTimes.vue';
+import Todoist from './components/Todoist.vue';
+import PhilipsHue from './components/PhilipsHue.vue';
 export default {
 	name: 'app',
 	components: {
-		BusTimes,
-		Clock,
-		DarkSky,
 		DynamicHighlight,
-		PhilipsHue,
-		Mastodon
+		Clock,
+		Mastodon,
+		DarkSky,
+		BusTimes,
+		Todoist,
+		PhilipsHue
 	}
 }
 </script>
@@ -75,7 +78,7 @@ body {
 	grid-gap: 3rem;
 	grid-template-areas:
 		'mastodon darksky darksky'
-		'mastodon phue busses'
+		'mastodon phue todoist'
 		'mastodon phue busses'
 	;
 	height: calc(100vh - 3rem);
@@ -91,4 +94,5 @@ body {
 .dark-sky { grid-area: darksky; }
 .philips-hue { grid-area: phue; }
 .bus-times { grid-area: busses; }
+.todoist { grid-area: todoist; }
 </style>
