@@ -21,7 +21,7 @@ Neat, eh?
 - [x] Bus times integration
 - [ ] Google Calendar integration
 - [ ] Spotify/now playing integration
-- [ ] Todoist integration
+- [x] Todoist integration
 - [x] Cycle accent colour over time maybe?
 - [ ] Actually do the cool remote control thing 2.0 was meant to do
 
@@ -45,6 +45,9 @@ VUE_APP_MASTODON_ACCESS_KEY=
 VUE_APP_BUSTIMES_APP_ID=
 VUE_APP_BUSTIMES_API_KEY=
 VUE_APP_BUSTIMES_STOP_ATCO_CODE=
+
+# Todoist
+VUE_APP_TODOIST_API_TOKEN=
 ```
 
 ### Those terminal commands in full
