@@ -21,6 +21,7 @@ Neat, eh?
 - [x] Bus times integration
 - [ ] Google Calendar integration
 - [ ] Spotify/now playing integration
+- [x] Todoist integration
 - [x] Cycle accent colour over time maybe?
 - [ ] Actually do the cool remote control thing 2.0 was meant to do
 
@@ -33,6 +34,8 @@ VUE_APP_HUE_API_KEY=
 
 # Dark Sky integration
 VUE_APP_DARKSKY_API_KEY=
+VUE_APP_DARKSKY_LATITUDE=
+VUE_APP_DARKSKY_LONGITUDE=
 
 # Mastodon integration
 VUE_APP_MASTODON_API_ENDPOINT=
@@ -42,6 +45,9 @@ VUE_APP_MASTODON_ACCESS_KEY=
 VUE_APP_BUSTIMES_APP_ID=
 VUE_APP_BUSTIMES_API_KEY=
 VUE_APP_BUSTIMES_STOP_ATCO_CODE=
+
+# Todoist
+VUE_APP_TODOIST_API_TOKEN=
 ```
 
 ### Those terminal commands in full

@@ -53,14 +53,6 @@ Vue.use(VueSkycons);
 export default {
 	name: 'DarkSky',
 	props: {
-		lat: {
-			type: Number,
-			required: true
-		},
-		lng: {
-			type: Number,
-			required: true
-		},
 		reloadInterval: {
 			type: Number,
 			default: 300000 // 5 minutes
@@ -70,6 +62,8 @@ export default {
 		return {
 			error: false,
 			initialized: false,
+			lat: process.env.VUE_APP_DARKSKY_LATITUDE,
+			lng: process.env.VUE_APP_DARKSKY_LONGITUDE,
 			forecastData: {}
 		}
 	},
