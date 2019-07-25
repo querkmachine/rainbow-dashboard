@@ -109,6 +109,7 @@ export default {
 <style scoped>
 .bus-times {
 	border: 1px solid rgba(255, 255, 255, .2);
+	overflow: hidden;
 }
 .bus-times__header {
 	padding: .75rem;
