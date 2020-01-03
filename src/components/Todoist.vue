@@ -8,7 +8,7 @@
 				<li class="todoist__item" v-for="item in tasksWithDueDates" :key="item.id">
 					<div class="todoist__task">
 						{{ item.content }}
-						<template v-for="i in (item.priority - 1)">🚩️ </template>
+						<template v-for="i in (item.priority - 1)">🚩️</template>
 					</div>
 					<div class="todoist__due">{{ item.due.date | dateDifference }}</div>
 				</li>
