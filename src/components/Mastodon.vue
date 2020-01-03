@@ -90,7 +90,7 @@ export default {
 		this.startListening();
 	},
 	updated() {
-		Twemoji.parse(document.body, {
+		Twemoji.parse(document.querySelectorAll('.mastodon')[0], {
 			folder: 'svg',
 			ext: '.svg'
 		});
