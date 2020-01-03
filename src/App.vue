@@ -7,8 +7,8 @@
 			<DarkSky />
 			<BusTimes />
 			<Todoist />
-			<PhilipsHue />
 		</div>
+		<PhilipsHue />
 	</div>
 </template>
 
@@ -78,21 +78,27 @@ body {
 	grid-gap: 3rem;
 	grid-template-areas:
 		'mastodon darksky darksky'
-		'mastodon phue todoist'
-		'mastodon phue busses'
+		'mastodon todoist buses'
+		'mastodon todoist buses'
 	;
-	height: calc(100vh - 3rem);
+	height: calc(100vh - 7rem);
 	padding-top: 1rem;
+	padding-bottom: 1rem;
 }
-.clock { 
+.clock,
+.philips-hue {
 	width: 100%;
 	position: absolute;
-	top: 0;
 	left: 0;
+}
+.clock { 
+	top: 0;
+}
+.philips-hue {
+	bottom: 0;
 }
 .mastodon { grid-area: mastodon; }
 .dark-sky { grid-area: darksky; }
-.philips-hue { grid-area: phue; }
-.bus-times { grid-area: busses; }
+.bus-times { grid-area: buses; }
 .todoist { grid-area: todoist; }
 </style>

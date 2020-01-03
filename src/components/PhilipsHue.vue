@@ -121,34 +121,41 @@ export default {
 
 <style scoped>
 .philips-hue {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-	grid-auto-rows: 120px;
-	grid-gap: 1.5rem;
+	display: flex;
+	height: 3rem;
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
 }
 .philips-hue__item {
+	flex: 1 1 1px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	padding: 1rem;
-	border: 1px solid rgba(255, 255, 255, .2);
+	padding: .5rem;
+	border-width: 0;
+	border-top-width: 1px;
+	border-style: solid;
+	border-color: rgba(255, 255, 255, .2);
 	color: #fff;
+	background-color: #000;
+	font-size: .8rem;
+}
+.philips-hue__item + .philips-hue__item {
+	border-left-width: 1px;
 }
 .philips-hue__item--invert {
 	color: #000;
 }
 .philips-hue__label {
-	font-size: smaller;
+	display: block;
+	padding-right: .5rem;
 }
 .philips-hue__value {
-	font-size: xx-large;
 	font-weight: 500;
+	white-space: nowrap;
 }
 .philips-hue__value-label {
-	font-size: smaller;
 	font-weight: 300;
 	opacity: .67;
 }
