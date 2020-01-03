@@ -20,8 +20,15 @@
 <script>
 import Axios from 'axios';
 import Moment from 'moment';
+import Twemoji from 'twemoji';
 export default {
 	name: 'Todoist',
+	props: {
+		reloadInterval: {
+			type: Number,
+			default: 3600000 // 1 hour
+		}
+	},
 	data() {
 		return {
 			initialized: false,
@@ -31,6 +38,15 @@ export default {
 	},
 	mounted() {
 		this.getTasks();
+		setInterval(() => {
+			this.getTasks();
+		}, this.reloadInterval);
+	},
+	updated() {
+		Twemoji.parse(document.querySelectorAll('.todoist')[0], {
+			folder: 'svg',
+			ext: '.svg'
+		});
 	},
 	computed: {
 		tasksWithDueDates: function() {
@@ -43,7 +59,19 @@ export default {
 		}
 	},
 	methods: {
+		loadData: function() {
+			if(localStorage.getItem('RD_TODOIST_TASKS')) {
+				this.tasks = JSON.parse(localStorage.getItem('RD_TODOIST_TASKS'));
+				this.initialized = true;
+				return true;
+			}
+			return false;
+		},
+		saveData: function() {
+			localStorage.setItem('RD_TODOIST_TASKS', JSON.stringify(this.tasks));
+		},
 		getTasks: function() {
+			if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
 			Axios
 				.get('https://api.todoist.com/rest/v1/tasks', {
 					headers: {
@@ -54,6 +82,7 @@ export default {
 					this.tasks = response.data;
 					this.error = false;
 					this.initialized = true;
+					this.saveData();
 				})
 				.catch((error) => {
 					this.error = error;
