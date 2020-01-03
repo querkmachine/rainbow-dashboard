@@ -11,7 +11,8 @@
 					</video>
 				</template>
 				<template v-else>
-					Unsupported media type. Fix it, Kim, fix it.
+					Unsupported media type. Fix it, Kim, fix it.<br>
+					(Returned type: {{ item.type }})
 				</template>
 			</li>
 		</ol>
