@@ -122,29 +122,29 @@ export default {
 <style scoped>
 .philips-hue {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-	grid-auto-rows: 120px;
-	grid-gap: 1.5rem;
+	grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+	grid-auto-rows: 90px;
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
+	overflow: hidden;
 }
 .philips-hue__item {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	padding: 1rem;
-	border: 1px solid rgba(255, 255, 255, .2);
+	padding: .5rem;
 	color: #fff;
+	background-color: rgba(255, 255, 255, .05);
 }
 .philips-hue__item--invert {
 	color: #000;
 }
 .philips-hue__label {
-	font-size: smaller;
+	font-size: small;
 }
 .philips-hue__value {
-	font-size: xx-large;
+	font-size: large;
 	font-weight: 500;
 }
 .philips-hue__value-label {

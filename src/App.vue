@@ -3,6 +3,7 @@
 		<DynamicHighlight />
 		<Clock />
 		<div class="wrapper__inner">
+			<Bats />
 			<Mastodon />
 			<DarkSky />
 			<BusTimes />
@@ -14,6 +15,7 @@
 
 <script>
 import DynamicHighlight from './components/DynamicHighlight.vue';
+import Bats from './components/Bats.vue';
 import Clock from './components/Clock.vue';
 import Mastodon from './components/Mastodon.vue';
 import DarkSky from './components/DarkSky.vue';
@@ -24,6 +26,7 @@ export default {
 	name: 'app',
 	components: {
 		DynamicHighlight,
+		Bats,
 		Clock,
 		Mastodon,
 		DarkSky,
@@ -78,7 +81,7 @@ body {
 	grid-gap: 3rem;
 	grid-template-areas:
 		'mastodon darksky darksky'
-		'mastodon phue todoist'
+		'mastodon bats todoist'
 		'mastodon phue busses'
 	;
 	height: calc(100vh - 3rem);
@@ -90,6 +93,7 @@ body {
 	top: 0;
 	left: 0;
 }
+.bats { grid-area: bats; }
 .mastodon { grid-area: mastodon; }
 .dark-sky { grid-area: darksky; }
 .philips-hue { grid-area: phue; }
