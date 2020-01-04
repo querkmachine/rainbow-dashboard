@@ -134,7 +134,6 @@ export default {
 	justify-content: space-between;
 	padding: .5rem;
 	border-width: 0;
-	border-top-width: 1px;
 	border-style: solid;
 	border-color: rgba(255, 255, 255, .2);
 	color: #fff;
