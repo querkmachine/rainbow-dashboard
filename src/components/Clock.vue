@@ -19,7 +19,20 @@ export default {
 	name: 'Clock',
 	data() {
 		return {
-			momentObj: Moment()
+			momentObj: Moment(),
+			holidays: [
+				{ date: Moment().month(0).date(1),   message: "🎊️ Happy new year!" },
+				{ date: Moment().month(0).date(16),  message: "🐲️ Appreciate a Dragon Day" },
+				{ date: Moment().month(1).date(14),  message: "💕️ Valentine's Day" },
+				{ date: Moment().month(2).date(15),  message: "🦇️ Space Bat Day (RIP Space Bat)" },
+				{ date: Moment().month(3).date(20),  message: "🔥️ Blaze it" },
+				{ date: Moment().month(4).date(25),  message: "👍️ Towel Day" },
+				{ date: Moment().month(7).date(13),  message: "💘️ May-aversary" },
+				{ date: Moment().month(8).date(22),  message: "🎂️ Happy birthday, you filthy animal" },
+				{ date: Moment().month(9).date(31),  message: "🎃️ Halloween" },
+				{ date: Moment().month(10).date(5),  message: "🎆️ Bonfire night" },
+				{ date: Moment().month(11).date(25), message: "🎄️ MERRY SHITSCRAM!" }
+			]
 		}
 	},
 	mounted() {
