@@ -3,7 +3,7 @@
 		<div class="clock__background">
 			<progress class="clock__progress" :min="unixStartOfYear - unixStartOfYear" :max="unixEndOfYear - unixStartOfYear" :value="unixNow - unixStartOfYear"></progress>
 			<div class="clock__months">
-				<div class="clock__month" v-for="i in 12" :style="'--noOfDays:' + daysInMonth(i)"><!--{{ i }}: {{ daysInMonth(i) }}--></div>
+				<div class="clock__month" v-for="i in 12" :key="i" :style="'--noOfDays:' + daysInMonth(i)"><!--{{ i }}: {{ daysInMonth(i) }}--></div>
 			</div>
 		</div>
 		<div class="clock__inner">
