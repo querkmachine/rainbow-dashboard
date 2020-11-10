@@ -75,7 +75,7 @@ body {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: repeat(3, 1fr);
-	grid-gap: 3rem;
+	grid-gap: 1.5rem;
 	grid-template-areas:
 		'mastodon darksky darksky'
 		'mastodon todoist buses'
