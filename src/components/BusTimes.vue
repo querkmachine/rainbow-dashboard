@@ -42,7 +42,7 @@ export default {
 	props: {
 		reloadInterval: {
 			type: Number,
-			default: 600000
+			default: 1000 * 60 * 20
 		}
 	},
 	data() {
