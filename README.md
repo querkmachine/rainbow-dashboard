@@ -17,7 +17,7 @@ Neat, eh?
 - [x] A clock
 - [x] Philips Hue integration
 - [x] Mastodon feed integration
-- [x] Dark Sky integration
+- [x] ~~Dark Sky~~ OpenWeatherMap integration
 - [x] Bus times integration
 - [ ] Google Calendar integration
 - [ ] Spotify/now playing integration
@@ -32,10 +32,11 @@ Neat, eh?
 VUE_APP_HUE_API_ENDPOINT=
 VUE_APP_HUE_API_KEY=
 
-# Dark Sky integration
-VUE_APP_DARKSKY_API_KEY=
-VUE_APP_DARKSKY_LATITUDE=
-VUE_APP_DARKSKY_LONGITUDE=
+# OpenWeatherMap
+VUE_APP_OWM_API_ENDPOINT=
+VUE_APP_OWM_API_KEY=
+VUE_APP_OWM_LATITUDE=
+VUE_APP_OWM_LONGITUDE=
 
 # Mastodon integration
 VUE_APP_MASTODON_API_ENDPOINT=
