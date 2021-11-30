@@ -1,6 +1,5 @@
 <template>
 	<div id="app" class="wrapper">
-		<DynamicHighlight />
 		<Clock />
 		<div class="wrapper__inner">
 			<Mastodon />
@@ -12,7 +11,6 @@
 </template>
 
 <script>
-import DynamicHighlight from './components/DynamicHighlight.vue';
 import Clock from './components/Clock.vue';
 import Mastodon from './components/Mastodon.vue';
 import OpenWeatherMap from './components/OpenWeatherMap.vue';
@@ -21,7 +19,6 @@ import PhilipsHue from './components/PhilipsHue.vue';
 export default {
 	name: 'app',
 	components: {
-		DynamicHighlight,
 		Clock,
 		Mastodon,
 		OpenWeatherMap,
@@ -32,9 +29,9 @@ export default {
 </script>
 
 <style>
-@import url('https://rsms.me/inter/inter.css');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap');
 :root {
-	--highlight: #e5218c;
+	--highlight: #786999;
 }
 * {
 	box-sizing: border-box;
@@ -50,12 +47,9 @@ body {
 body {
 	color: #fff;
 	background-color: #000;
-	font-family: 'Inter', sans-serif;
+	font-family: 'Space Grotesk', sans-serif;
 	overflow: hidden;
 	cursor: none;
-}
-@supports (font-variation-settings: normal) {
-	html { font-family: 'Inter var', sans-serif; }
 }
 .emoji {
 	height: 1em;
