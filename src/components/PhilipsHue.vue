@@ -77,7 +77,7 @@ export default {
 					break;
 					case 'ZLLLightLevel':
 						lightObj.verified = true;
-						lightObj.name = 'Living room light level';
+						lightObj.name = 'Hallway light level';
 						lightObj.lightLevel = item.state.lightlevel;
 						lightObj.daylight = item.state.daylight;
 						lightObj.dark = item.state.dark;
