@@ -4,9 +4,8 @@
 		<Clock />
 		<div class="wrapper__inner">
 			<Mastodon />
-			<DarkSky />
 			<BusTimes />
-			<Todoist />
+			<OpenWeatherMap />
 		</div>
 		<PhilipsHue />
 	</div>
@@ -16,9 +15,8 @@
 import DynamicHighlight from './components/DynamicHighlight.vue';
 import Clock from './components/Clock.vue';
 import Mastodon from './components/Mastodon.vue';
-import DarkSky from './components/DarkSky.vue';
+import OpenWeatherMap from './components/OpenWeatherMap.vue';
 import BusTimes from './components/BusTimes.vue';
-import Todoist from './components/Todoist.vue';
 import PhilipsHue from './components/PhilipsHue.vue';
 export default {
 	name: 'app',
@@ -26,9 +24,8 @@ export default {
 		DynamicHighlight,
 		Clock,
 		Mastodon,
-		DarkSky,
+		OpenWeatherMap,
 		BusTimes,
-		Todoist,
 		PhilipsHue
 	}
 }
@@ -77,9 +74,9 @@ body {
 	grid-template-rows: repeat(3, 1fr);
 	grid-gap: 1.5rem;
 	grid-template-areas:
-		'mastodon darksky darksky'
-		'mastodon todoist buses'
-		'mastodon todoist buses'
+		'mastodon weather weather'
+		'mastodon . buses'
+		'mastodon . buses'
 	;
 	height: calc(100vh - 7rem);
 	padding-top: 1rem;
@@ -98,7 +95,6 @@ body {
 	bottom: 0;
 }
 .mastodon { grid-area: mastodon; }
-.dark-sky { grid-area: darksky; }
 .bus-times { grid-area: buses; }
-.todoist { grid-area: todoist; }
+.owm { grid-area: weather; }
 </style>
