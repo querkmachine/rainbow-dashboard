@@ -1,51 +1,38 @@
 <template>
-	<ol class="mastodon">
-		<li class="mastodon__item" v-for="item in statuses" :key="item.id">
-			<article :class="['mastodon__status', item.reblog ? 'mastodon__status--boosted' : '']">
-				<div class="mastodon__metadata">
-					<div class="mastodon__avatar">
-						<img v-if="item.reblog" :src="item.reblog.account.avatar" :alt="item.reblog.account.acct">
-						<img :src="item.account.avatar" :alt="item.account.acct">
-					</div>
-					<div class="mastodon__timestamp">
-						<Timeago :datetime="item.created_at" :auto-update="1" :dictionary="timeagoDictionary" />
-					</div>
-				</div>
-				<div class="mastodon__inner">
-					<header class="mastodon__header">
-						<div class="mastodon__account">
-							<strong class="mastodon__account-name">
-								<template v-if="item.reblog">
-									<span v-html="customEmoji(item.reblog.account.display_name, item.reblog.account.emojis)"></span>
-									<small>{{ item.reblog.account.acct }}</small>
-								</template>
-								<template v-else>
-									<span v-html="customEmoji(item.account.display_name, item.account.emojis)"></span>
-									<small>{{ item.account.acct }}</small>
-								</template>
-							</strong>
-						</div>
-					</header>
-					<div class="mastodon__toot">
-						<div class="mastodon__content-warning" v-if="item.spoiler_text"><mark v-html="customEmoji(item.spoiler_text, item.emojis)"></mark></div>
-						<div class="mastodon__content" v-html="customEmoji(item.content, item.emojis)"></div>
-						<mastodon-media v-if="item.reblog && item.reblog.media_attachments.length" :data="item.reblog.media_attachments" />
-						<mastodon-media v-else-if="item.media_attachments.length" :data="item.media_attachments" />
-						<mastodon-card v-else-if="item.reblog && item.reblog.card" :data="item.reblog.card" />
-						<mastodon-card v-else-if="item.card" :data="item.card" />
-					</div>
-				</div>
-			</article>
+	<ol class="lcars-mastodon" v-if="initialized">
+		<li class="lcars-mastodon__toot" v-for="item in displayedStatuses" :key="item.id">
+			<div class="lcars-mastodon__meta">
+				<span class="lcars-mastodon__meta-author">
+					<template v-if="item.reblog">
+						{{ item.reblog.account.acct }}
+					</template>
+					<template v-else>
+						{{ item.account.acct }}
+					</template>
+				</span>
+				<span class="lcars-mastodon__meta-reblog" v-if="item.reblog">
+					{{ item.account.acct }}
+				</span>
+				<span class="lcars-mastodon__meta-timestamp">
+					<Timeago :datetime="item.created_at" :auto-update="1" :dictionary="timeagoDictionary" />
+				</span>
+			</div>
+			<div class="lcars-mastodon__body">
+				<mastodon-media v-if="item.reblog && item.reblog.media_attachments.length" :data="item.reblog.media_attachments" />
+				<mastodon-media v-else-if="item.media_attachments.length" :data="item.media_attachments" />
+				<div class="lcars-mastodon__cw" v-if="item.spoiler_text" v-html="customEmoji(item.spoiler_text, item.emojis)"></div>
+				<div class="lcars-mastodon__content" v-if="item.content" v-html="customEmoji(item.content, item.emojis)"></div>
+			</div>
 		</li>
 	</ol>
 </template>
 
 <script>
 import Mastodon from 'mastodon-api';
-import MastodonCard from './Mastodon-Card.vue';
-import MastodonMedia from './Mastodon-Media.vue';
-import Timeago from './Timeago.vue';
 import Twemoji from 'twemoji';
+
+import Timeago from './Timeago.vue';
+import MastodonMedia from './Mastodon-Media.vue';
 
 // Set up Mastodon API
 const M = new Mastodon({
@@ -56,9 +43,8 @@ const M = new Mastodon({
 export default {
 	name: 'Mastodon',
 	components: {
-		MastodonCard,
-		MastodonMedia,
-		Timeago
+		Timeago,
+		MastodonMedia
 	},
 	data() {
 		return {
@@ -108,12 +94,11 @@ export default {
 			localStorage.setItem('RD_MASTODON_STATUSES', JSON.stringify(this.statuses));
 		},
 		loadInitialStatuses: function() {
-			//if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
+			if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
 			M
 				.get('timelines/home', {})
 				.then((response) => {
 					this.statuses = response.data;
-					this.trimStatusArray();
 					this.error = false;
 					this.initialized = true;
 					this.saveData();
@@ -130,7 +115,6 @@ export default {
 				if(data.event === 'update') {
 					const payload = JSON.parse(data.payload);
 					this.statuses.unshift(payload);
-					this.trimStatusArray();
 				}
 				else if(data.event === 'delete') {
 					const index = this.statuses.findIndex((status) => {
@@ -150,131 +134,79 @@ export default {
 				string = string.replace(`:${emojiArray[i].shortcode}:`, `<img class="emoji" src="${emojiArray[i].static_url}" alt="${emojiArray[i].shortcode}">`);
 			}
 			return string;
-		},
-		trimStatusArray: function() {
-			this.statuses = this.statuses.slice(0, 8);
+		}
+	},
+	computed: {
+		displayedStatuses: function() {
+			return this.statuses.slice(0, 10);
 		}
 	}
 }
 </script>
 
-<style scoped>
-.mastodon {
-	margin: 0;
-	padding: 0;
-	position: relative;
-	list-style-type: none;
-	overflow: hidden;
-}
-.mastodon::after {
-	content: '';
-	width: 100%;
-	height: 150px;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	background-image: linear-gradient(
-		to top,
-		hsl(0, 0%, 0%) 0%,
-		hsla(0, 0%, 0%, 0.738) 19%,
-		hsla(0, 0%, 0%, 0.541) 34%,
-		hsla(0, 0%, 0%, 0.382) 47%,
-		hsla(0, 0%, 0%, 0.278) 56.5%,
-		hsla(0, 0%, 0%, 0.194) 65%,
-		hsla(0, 0%, 0%, 0.126) 73%,
-		hsla(0, 0%, 0%, 0.075) 80.2%,
-		hsla(0, 0%, 0%, 0.042) 86.1%,
-		hsla(0, 0%, 0%, 0.021) 91%,
-		hsla(0, 0%, 0%, 0.008) 95.2%,
-		hsla(0, 0%, 0%, 0.002) 98.2%,
-		hsla(0, 0%, 0%, 0) 100%
-	);
-}
-.mastodon__item + .mastodon__item {
-	margin-top: -1px;
-}
-.mastodon__status {
-	display: flex;
-	border: 1px solid rgba(255, 255, 255, .2);
-	padding: .75rem;
-}
-.mastodon__metadata {
-	flex: 0 0 50px;
-	margin-right: .75rem;
-	text-align: center;
-}
-.mastodon__header {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	margin-bottom: .75rem;
-}
-.mastodon__avatar {
-	width: 50px;
-	height: 50px;
-	position: relative;
-}
-.mastodon__avatar img {
-	width: 100%;
-	height: 100%;
-	border-radius: .25rem;
-}
-.mastodon__timestamp {
-	margin-top: .75rem;
-	font-size: smaller;
-	font-feature-settings: 'tnum' 1;
-	opacity: .67;
-}
-.mastodon__inner {
-	flex-grow: 1;
-}
-.mastodon__status--boosted .mastodon__avatar img:nth-child(1) {
-	width: 80%;
-	height: 80%;
-}
-.mastodon__status--boosted .mastodon__avatar img:nth-child(2) {
-	width: 50%;
-	height: 50%;
-	position: absolute;
-	right: 0;
-	bottom: 0;
+<style scoped lang="scss">
+	.lcars-mastodon {
+		list-style-type: none;
+		&__toot {
+			margin-bottom: 1rem;
+		}
+		&__meta {
+			display: flex;
+			flex-direction: row-reverse;
+			padding-right: 1rem;
+			padding-left: 1rem;
+			border-radius: 1rem;
+			background-color: var(--color-primary-1);
+		}
+		&__meta-author {
+			padding: .125rem .5rem;
+			background-color: var(--canvas-background-color);
+			color: var(--color-primary-2);
+			text-transform: uppercase;
+		}
+		&__meta-timestamp {
+			margin-right: auto;
+			padding: .125rem .5rem;
+			border-width: 0 .25rem; 
+			border-style: solid;
+			border-color: var(--canvas-background-color);
+			color: var(--canvas-background-color);
+			background-color: var(--color-primary-2);
+			font-variant-numeric: tabular-nums;
+		}
+		&__meta-reblog {
+			padding: .125rem .5rem;
+			color: var(--canvas-background-color);
+			text-transform: uppercase;
+		}
+		&__body {
+			padding: .5rem 1.5rem;
+			text-align: left;
+			overflow: hidden;
+			.lcars-mastodon-media {
+				width: 8rem;
+				float: right;
+				margin-left: .5rem;
+			}
+		}
+		&__cw {
+			color: var(--color-secondary-1);
+			text-transform: uppercase;
+		}
+		&__content {
+			line-height: 1.2;
+		}
+	}
+</style>
 
+<style lang="scss">
+.lcars-mastodon {
+	&__content {
+		a {
+			color: var(--color-secondary-2);
+			text-decoration: none;
+			.invisible:first-child { display: none; }
+		}
+	}
 }
-.mastodon__account {
-	
-}
-.mastodon__account-name {
-	display: block;
-	font-weight: 600;
-}
-.mastodon__account-name small {
-	margin-left: .25rem;
-	font-size: smaller;
-	font-weight: 400;
-	opacity: .67;
-}
-.mastodon__account-name--boosted-by {
-	font-weight: 400;
-}
-.mastodon__toot {
-
-}
-.mastodon__content-warning {
-	margin-bottom: .25rem;
-}
-.mastodon__content-warning mark {
-	color: inherit;
-	background-color: var(--highlight);
-	box-shadow: -.25rem 0 0 0 var(--highlight), .25rem 0 0 0 var(--highlight);
-	box-decoration-break: clone;
-}
-.mastodon__content {
-	line-height: 1.25;
-}
-.mastodon__content >>> a {
-	color: var(--highlight);
-}
-.mastodon__content >>> a .invisible:first-child { display: none; }
-.mastodon__content > :first-child { margin-top: 0; }
-.mastodon__content > :last-child { margin-bottom: 0; }
 </style>

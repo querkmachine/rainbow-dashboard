@@ -1,32 +1,24 @@
 <template>
-	<section class="bus-times">
+	<ol class="lcars-timetable">
 		<template v-if="initialized">
-			<header class="bus-times__header">
-				{{ stopInfo.stop_name }}
-				<template v-if="stopInfo.indicator">
-					({{ stopInfo.indicator }})
-				</template>
-			</header>
-			<ol class="bus-times__list">
-				<template v-for="item in stopInfo.departures.all">
-					<li class="bus-times__item" v-if="(item.expected_departure_date && item.expected_departure_time) && makeUnixTime(item.expected_departure_date, item.expected_departure_time) > unixTime" :key="item.id">
-						<div class="bus-times__line">{{ item.line_name }}</div>
-						<div class="bus-times__destination">{{ item.direction }}</div>
-						<div class="bus-times__due">
-							<Timeago :datetime="makeISODate(item.expected_departure_date, item.expected_departure_time)" :auto-update="1" />
-						</div>
-					</li>
-					<li class="bus-times__item" v-else-if="makeUnixTime(item.date, item.aimed_departure_time) > unixTime" :key="item.id">
-						<div class="bus-times__line">{{ item.line_name }}</div>
-						<div class="bus-times__destination">{{ item.direction }}</div>
-						<div class="bus-times__due">
-							<Timeago :datetime="makeISODate(item.date, item.aimed_departure_time)" :auto-update="1" />
-						</div>
-					</li>
-				</template>
-			</ol>
+			<template v-for="(item, i) in displayDepartures">
+				<li class="lcars-timetable__item" v-if="item.expected_departure_date && item.expected_departure_time" :key="i" :data-line="item.line_name">
+					<div class="lcars-timetable__line">{{ item.line_name }}</div>
+					<div class="lcars-timetable__destination">{{ item.direction }}</div>
+					<div class="lcars-timetable__due">
+						<Timeago :datetime="makeISODate(item.expected_departure_date, item.expected_departure_time)" :auto-update="1" />
+					</div>
+				</li>
+				<li class="lcars-timetable__item" v-else :key="i" :data-line="item.line_name">
+					<div class="lcars-timetable__line">{{ item.line_name }}</div>
+					<div class="lcars-timetable__destination">{{ item.direction }}</div>
+					<div class="lcars-timetable__due">
+						<Timeago :datetime="makeISODate(item.date, item.aimed_departure_time)" :auto-update="1" />
+					</div>
+				</li>
+			</template>
 		</template>
-	</section>
+	</ol>
 </template>
 
 <script>
@@ -75,7 +67,7 @@ export default {
 			localStorage.setItem('RD_BUSTIMES_TIMETABLE', JSON.stringify(this.stopInfo));
 		},
 		updateTimetable: function() {
-			//if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
+			if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
 			Axios
 				.get(`https://transportapi.com/v3/uk/bus/stop/${process.env.VUE_APP_BUSTIMES_STOP_ATCO_CODE}/live.json`, {
 					params: {
@@ -102,47 +94,53 @@ export default {
 		makeUnixTime: function(date, time) {
 			return Moment(`${date} ${time}`).unix();
 		}
+	},
+	computed: {
+		displayDepartures: function() {
+			return this.stopInfo.departures.all.filter(item => {
+				return this.makeUnixTime(item.expected_departure_date, item.expected_departure_time) > this.unixTime || this.makeUnixTime(item.date, item.aimed_departure_time) > this.unixTime;
+			}).slice(0, 7);
+		}
 	}
 }
 </script>
 
-<style scoped>
-.bus-times {
-	border: 1px solid rgba(255, 255, 255, .2);
-	overflow: hidden;
-}
-.bus-times__header {
-	padding: .75rem;
-	font-size: large;
-	font-weight: 500;
-}
-.bus-times__list {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-}
-.bus-times__item {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	padding: .75rem;
-}
-.bus-times__item + .bus-times__item {
-	border-top: 1px solid rgba(255, 255, 255, .2);
-}
-.bus-times__line {
-	width: 2em;
-	font-weight: 500;
-}
-.bus-times__destination {
-	padding-right: .5rem;
-	padding-left: .5rem;
-}
-.bus-times__due {
-	margin-left: auto;
-	font-size: smaller;
-	font-feature-settings: 'tnum' 1;
-	text-align: right;
-	opacity: .67;
-}
+<style scoped lang="scss">
+	.lcars-timetable {
+		display: flex;
+		flex-direction: row-reverse;
+		justify-content: flex-start;
+		height: var(--footer-height);
+		list-style-type: none;
+		text-transform: uppercase;
+		&__item {
+			flex: 0 0 11%;
+			display: flex;
+			flex-direction: column;
+			padding: .5rem;
+			border-width: 0;
+			border-left-width: .25rem;
+			border-style: solid;
+			border-color: var(--canvas-background-color);
+			color: var(--canvas-background-color);
+			background-color: var(--color-neutral-1);
+			&:first-child {
+				flex-basis: 16%;
+				border-right-width: .25rem;
+				background-color: var(--color-secondary-1);
+			}
+			&[data-line="8"] { background-color: var(--color-secondary-1); }
+			&[data-line="505"] { background-color: var(--color-primary-2); }
+		}
+		&__line {
+			font-family: var(--font-heading);
+			font-size: 2rem;
+		}
+		&__destination {
+			font-family: var(--font-heading);
+		}
+		&__due {
+			margin-top: auto;
+		}
+	}
 </style>

@@ -1,33 +1,24 @@
 <template>
-	<div class="pihole">
-		<template v-if="error">ERROR: {{ error }}</template>
-		<template v-if="initialized">
-			<div class="pihole__inner">
-				<div class="pihole__heading">PiHole &mdash; {{ summary.status }}</div>
-				<dl class="pihole__data">
-					<div class="pihole__item">
-						<dt class="pihole__key">DNS queries today</dt>
-						<dd class="pihole__value">{{ formatNumber(summary.dns_queries_today) }}</dd>
-					</div>
-					<div class="pihole__item">
-						<dt class="pihole__key">ads blocked today ({{ summary.ads_percentage_today.toFixed(2) }}%)</dt>
-						<dd class="pihole__value">{{ formatNumber(summary.ads_blocked_today) }}</dd>
-					</div>
-					<div class="pihole__item">
-						<dt class="pihole__key">connected clients</dt>
-						<dd class="pihole__value">{{ formatNumber(summary.unique_clients) }}</dd>
-					</div>
-				</dl>
-			</div>
-		</template>
-		<template v-if="graphInitialized">
-			<ol class="pihole__graph">
-				<li v-for="(domains, timestamp) in historic.domains_over_time" :key="timestamp" class="pihole__graph-item">
-					<div class="pihole__graph-bar pihole__graph-bar--domains" :style="'height:' + (100 / graphHighestBar * domains) + '%'"></div>
-					<div class="pihole__graph-bar pihole__graph-bar--ads" :style="'height:' + (100 / graphHighestBar * historic.ads_over_time[timestamp]) + '%'"></div>
-				</li>
-			</ol>
-		</template>
+	<div class="lcars-pihole">
+		<table class="lcars-pihole__table" v-if="initialized">
+			<tbody>
+				<tr>
+					<th scope="row"><span>Queries</span></th>
+					<td>{{ summary.dns_queries_today }}</td>
+					<td v-for="(domains, timestamp) in historic.domains_over_time" :key="timestamp">{{ historic.domains_over_time[timestamp] }}</td>
+				</tr>
+				<tr>
+					<th scope="row"><span>Blocked</span></th>
+					<td>{{ summary.ads_blocked_today }}</td>
+					<td v-for="(domains, timestamp) in historic.ads_over_time" :key="timestamp">{{ historic.ads_over_time[timestamp] }}</td>
+				</tr>
+				<tr>
+					<th scope="row"><span>%</span></th>
+					<td>{{ summary.ads_percentage_today.toFixed(3) }}</td>
+					<td v-for="(domains, timestamp) in historic.domains_over_time" :key="timestamp">{{ (100 / historic.domains_over_time[timestamp] * historic.ads_over_time[timestamp]).toFixed(3) }}</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </template>
 
@@ -81,92 +72,72 @@ export default {
 				this.error = error;
 				this.graphInitialized = false;
 			})
-		},
-		formatNumber: function(num) {
-			return new Intl.NumberFormat().format(num);
-		}
-	},
-	computed: {
-		graphHighestBar: function() {
-			const data = this.historic.domains_over_time;
-			let highest = 0;
-			for(const key in data) {
-				if(data[key] > highest) {
-					highest = data[key];
-				}
-			}
-			return highest;
 		}
 	}
 }
 </script>
 
-<style scoped>
-	.pihole {
-		padding: .75rem;
-		border: 1px solid rgba(255, 255, 255, .2);
+<style scoped lang="scss">
+	.lcars-pihole {
+		font-family: var(--font-heading);
+		text-align: right;
+		text-transform: uppercase;
 		overflow: hidden;
-		position: relative;
+		&__table {
+			width: 100%;
+			margin: 0;
+			padding: 0;
+			border-collapse: collapse;
+		}
+		tr {
+			&:not(:first-child) :is(th, td) {
+				border-top: .25rem solid var(--canvas-background-color);
+			}
+		}
+		th,
+		td {
+			margin: 0;
+			padding: 0;
+			border: 0;
+			vertical-align: baseline;
+		}
+		th {
+			width: var(--label-width);
+			margin-top: .25rem;
+			padding: .125rem .5rem .125rem 1rem;
+			color: var(--canvas-background-color);
+			background-color: var(--color-secondary-1);
+			border-radius: 1rem 0 0 1rem;
+		}
+		td {
+			padding: .125rem 0 .125rem .5rem;
+			color: var(--color-primary-3);
+			animation-name: piholeNumbers;
+			animation-timing-function: linear;
+			animation-iteration-count: infinite;
+			animation-duration: 4s;
+			font-variant-numeric: tabular-nums;
+			&:nth-of-type(1) {
+				padding-right: .5rem;
+				border-right: .25rem solid var(--color-secondary-1);
+			}
+			&:nth-of-type(n+22) {
+				display: none;
+			}
+		}
+		@for $i from 1 through 4 {
+			tr:nth-child(#{$i}) td { animation-delay: (1s * $i) + 3s; }
+		}
 	}
-	.pihole__inner {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		position: relative;
-		z-index: 1;
-	}
-	.pihole__heading {
-		margin-bottom: .75rem;
-		font-size: large;
-		font-weight: 500;
-	}
-	.pihole__data {
-		margin: 0;
-		padding: 0;
-		flex-grow: 1;
-		display: flex;
-		align-items: center;
-	}
-	.pihole__item {
-		flex: 1 1 1px;
-		display: flex;
-		flex-direction: column-reverse;
-		text-align: center;
-	}
-	.pihole__key {
-		opacity: .67;
-		font-weight: 500;
-		margin: 0;
-	}
-	.pihole__value {
-		margin: 0;
-		font-size:xx-large;
-	}
-	.pihole__graph {
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		display: flex;
-		list-style-type: none;
-		margin: 0;
-		padding: 0;
-	}
-	.pihole__graph-item {
-		flex: 1 1 1px;
-		position: relative;
-	}
-	.pihole__graph-bar {
-		width: 100%;
-		position: absolute;
-		bottom: 0;
-		left: 0;
-	}
-	.pihole__graph-bar--domains {
-		background-color: #222;
-	}
-	.pihole__graph-bar--ads {
-		background-color: var(--highlight);
+	
+	@keyframes piholeNumbers {
+		0%,
+		20%,
+		75%,
+		100% { color: var(--color-primary-3); }
+		25%,
+		45% { color: var(--color-secondary-1); }
+		50%,
+		70% { color: var(--color-primary-1); }
 	}
 </style>

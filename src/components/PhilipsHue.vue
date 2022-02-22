@@ -1,24 +1,23 @@
 <template>
-	<ul class="philips-hue">
-		<li v-if="error">ERROR: {{ error }}</li>
-		<li v-for="item in displayDevices" :key="item.id" :class="['philips-hue__item', item.on && item.cssInvert ? 'philips-hue__item--invert' : '']" :style="item.on && item.cssBackground ? 'background-color:' + item.cssBackground : ''">
-			<div class="philips-hue__label">
-				{{ item.name }}
-			</div>
-			<div class="philips-hue__value" v-if="item.temperature">
-				{{ item.temperature / 100 | round }}<span class="philips-hue__value-label">&deg;</span>
-			</div>
-			<div class="philips-hue__value" v-else-if="item.lightLevel">
-				{{ item.lightLevel / 1000 | round }}<span class="philips-hue__value-label"> lux</span>
-			</div>
-			<div class="philips-hue__value" v-else-if="item.on && item.brightness">
-				{{ item.brightness | round }}<span class="philips-hue__value-label">%</span>
-			</div>
-			<div class="philips-hue__value" v-else>
-				<span class="philips-hue__value-label">Off</span>
-			</div>
-		</li>
-	</ul>
+	<div class="lcars-hue">
+		<div v-for="item in displayDevices" :key="item.id" class="lcars-hue__item" :style="item.on && item.cssBackground ? 'background-color:' + item.cssBackground : ''">
+			<span class="lcars-hue__name">{{ item.name }}</span><br>
+			<span class="lcars-hue__status">
+				<template v-if="item.temperature">
+					{{ item.temperature / 100 | round }}&deg;
+				</template>
+				<template v-else-if="item.lightLevel">
+					{{ item.lightLevel / 1000 | round }} lux
+				</template>
+				<template v-else-if="item.on && item.brightness">
+					{{ item.brightness | round }}%
+				</template>
+				<template v-else>
+					Off
+				</template>
+			</span>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -61,27 +60,27 @@ export default {
 						lightObj.verified = true;
 						lightObj.on = item.state.on;
 						lightObj.brightness = this.normalize(item.state.bri, 0, 100, 0, 255);
-						lightObj.cssBackground = `hsl(${this.normalize(item.state.hue, 0, 360, 0, 65535)}deg, ${this.normalize(item.state.sat, 0, 100, 0, 254)}%, ${this.normalize(item.state.bri, 0, 50, 0, 255)}%)`;
+						lightObj.cssBackground = `hsl(${this.normalize(item.state.hue, 0, 360, 0, 65535)}deg, ${this.normalize(item.state.sat, 0, 100, 0, 254)}%, ${this.normalize(item.state.bri, 25, 50, 0, 255)}%)`;
 					break;
 					case 'Dimmable light':
 						lightObj.verified = true;
 						lightObj.on = item.state.on;
 						lightObj.brightness = this.normalize(item.state.bri, 0, 100, 0, 255);
-						lightObj.cssBackground = `hsl(0deg, 0%, ${this.normalize(item.state.bri, 0, 100, 0, 255)}%)`;
+						lightObj.cssBackground = `hsl(0deg, 0%, ${this.normalize(item.state.bri, 25, 100, 0, 255)}%)`;
 						lightObj.cssInvert = lightObj.brightness > 80 ? true : false;
 					break;
-					case 'ZLLTemperature':
-						lightObj.verified = true;
-						lightObj.name = 'Ambient temperature';
-						lightObj.temperature = item.state.temperature;
-					break;
-					case 'ZLLLightLevel':
-						lightObj.verified = true;
-						lightObj.name = 'Hallway light level';
-						lightObj.lightLevel = item.state.lightlevel;
-						lightObj.daylight = item.state.daylight;
-						lightObj.dark = item.state.dark;
-					break;
+					// case 'ZLLTemperature':
+					// 	lightObj.verified = true;
+					// 	lightObj.name = 'Ambient temperature';
+					// 	lightObj.temperature = item.state.temperature;
+					// break;
+					// case 'ZLLLightLevel':
+					// 	lightObj.verified = true;
+					// 	lightObj.name = 'Hallway light level';
+					// 	lightObj.lightLevel = item.state.lightlevel;
+					// 	lightObj.daylight = item.state.daylight;
+					// 	lightObj.dark = item.state.dark;
+					// break;
 				}
 				if(lightObj.verified) tidyDeviceArray.push(lightObj);
 			});
@@ -119,43 +118,28 @@ export default {
 }
 </script>
 
-<style scoped>
-.philips-hue {
-	display: flex;
-	height: 3rem;
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-}
-.philips-hue__item {
-	flex: 1 1 1px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	padding: .5rem;
-	border-width: 0;
-	border-style: solid;
-	border-color: rgba(255, 255, 255, .2);
-	color: #fff;
-	background-color: #000;
-	font-size: .8rem;
-}
-.philips-hue__item + .philips-hue__item {
-	border-left-width: 1px;
-}
-.philips-hue__item--invert {
-	color: #000;
-}
-.philips-hue__label {
-	display: block;
-	padding-right: .5rem;
-}
-.philips-hue__value {
-	font-weight: 500;
-	white-space: nowrap;
-}
-.philips-hue__value-label {
-	font-weight: 300;
-	opacity: .67;
+<style scoped lang="scss">
+.lcars-hue {
+	flex-grow: 0;
+	&__item {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		align-items: flex-end;
+		min-height: 3.25rem;
+		margin-top: .25rem;
+		margin-bottom: .25rem;
+		padding: .5rem;
+		color: var(--canvas-background-color);
+		background-color: var(--color, var(--color-neutral-1));
+		text-transform: uppercase;
+		transition: background-color .3333s ease-in-out;
+	}
+	&__name {
+		font-family: var(--font-heading);
+	}
+	&__status {
+		
+	}
 }
 </style>

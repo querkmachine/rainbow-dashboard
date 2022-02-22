@@ -1,45 +1,19 @@
 <template>
-	<div class="owm">
-		<template v-if="error">ERROR: {{ error }}</template>
-		<template v-if="initialized">
-			<section class="owm__section">
-				<div class="owm__summary">
-					{{ current.summary }} currently.
-					{{ nextHour.summary }} soon.
-					{{ next12Hours.summary }} later.
+	<div class="lcars-weather" v-if="initialized">
+		<ol class="lcars-weather__graph">
+			<li v-for="bar in next12Hours.graph.data" :key="bar.dt" class="lcars-weather__row">
+				<div class="lcars-weather__time">{{ timestampToTime(bar.dt) }}</div>
+				<div class="lcars-weather__rain">
+					<div class="lcars-weather__rain-bar" :style="'width:' + ((100 / next12Hours.graph.maxPrecipitation) * getBarPrecipitation(bar)) + '%'"></div>
+					<div class="lcars-weather__condition" :style="'left:' + forecastGraphPosition(bar.temp, next12Hours.graph.minTemperature, next12Hours.graph.maxTemperature) + '%'">
+						<skycon :condition="getSkycon(bar.weather[0].id, bar.weather[0].icon)" width="20" height="20" color="white" />
+					</div>
 				</div>
-				<div class="owm__temperature">
-					<span class="owm__temperature-main">
-						<small>Feels like</small>
-						{{ round(current.apparentTemperature) }}&deg;
-					</span>
+				<div class="lcars-weather__temp">
+					{{ round(bar.temp) }}&deg;
 				</div>
-				<div class="owm__rain-graph" v-if="nextHour.graph.show">
-					<ol class="owm__rain-graph-list">
-						<li class="owm__rain-graph-bar" v-for="bar in nextHour.graph.data" :style="'height:' + ((100 / nextHour.graph.maxPrecipitation) * bar.precipIntensity) + '%'" :key="bar.time">
-							<div class="owm__rain-graph-bar-variance" :style="'height:' + ((100 / nextHour.graph.maxPrecipitation) * bar.precipIntensityError) + '%'">
-							</div>
-						</li>
-					</ol>
-				</div>
-			</section>
-			<section class="owm__section">
-				<div class="owm__forecast-graph">
-					<ol class="owm__forecast-graph-list">
-						<li v-for="bar in next12Hours.graph.data" :key="bar.dt" class="owm__forecast-graph-bar">
-							<div class="owm__forecast-graph-label">{{ timestampToTime(bar.dt) }}</div>
-							<div class="owm__forecast-graph-rain" :style="'height:' + ((100 / next12Hours.graph.maxPrecipitation) * getBarPrecipitation(bar)) + '%'"></div>
-							<div class="owm__forecast-graph-details" :style="'bottom:' + forecastGraphPosition(bar.temp, next12Hours.graph.minTemperature, next12Hours.graph.maxTemperature) + '%'">
-								<div class="owm__forecast-graph-icon">
-									<skycon :condition="getSkycon(bar.weather[0].id, bar.weather[0].icon)" width="90" height="90" color="white" />
-								</div>
-								<div class="owm__forecast-graph-temperature">{{ round(bar.temp) }}&deg;</div>
-							</div>
-						</li>
-					</ol>
-				</div>
-			</section>
-		</template>
+			</li>
+		</ol>
 	</div>
 </template>
 	
@@ -144,7 +118,7 @@
 				return Math.round(num);
 			},
 			timestampToTime: function(timestamp) {
-				return Moment.unix(timestamp).format('HH:mm');
+				return Moment.unix(timestamp).format('HHmm');
 			},
 			getBarPrecipitation: function(bar) {
 				if(bar.rain) {
@@ -179,8 +153,8 @@
 			},
 			forecastGraphPosition: function(temperature, minTemperature, maxTemperature) {
 				// Not 0-100 to avoid overlapping time label or going off the bottom of the bar
-				const minPercentage = 7.5;
-				const maxPercentage = 67;
+				const minPercentage = 2;
+				const maxPercentage = 90;
 				return minPercentage + (temperature - minTemperature) / (maxTemperature - minTemperature) * (maxPercentage - minPercentage);
 			},
 			getSkycon(id, iconCode) {
@@ -239,151 +213,73 @@
 	}
 </script>
 	
-<style scoped>
-	.owm {
-		display: grid;
-		grid-template-columns: 1fr 4fr;
-		grid-gap: 1.5rem;
-		padding: .75rem;
-		border: 1px solid rgba(255, 255, 255, .2);
-	}
-	.owm__section {
-	
-	}
-	.owm__section-header {
-		margin-bottom: .75rem;
-		font-feature-settings: 'case' 1;
-		font-size: smaller;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		opacity: .67;
-	}
-	.owm__temperature {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		align-items: flex-end;
-		margin-top: .75rem;
-		font-size: xx-large;
-		font-weight: 500;
-	}
-	.owm__temperature small {
-		display: block;
-		font-size: small;
-	}
-	.owm__temperature-main {
-		margin-right: .5rem;
-	}
-	.owm__temperature-secondary {
-		font-size: auto;
-		font-weight: 300;
-		opacity: .67;
-	}
-	.owm__rain-graph {
-		position: relative;
-		margin-top: .75rem;
-		padding-top: 40%;
-		border-width: 0 1px 1px 1px;
-		border-style: solid;
-		border-color: rgba(255, 255, 255, .2);
-		background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(100% - 1px), rgba(255, 255, 255, .2) calc(100% - 1px), rgba(255, 255, 255, .2) 100%);
-		background-size: 100% 33.3333%;
-		overflow: hidden;
-	}
-	.owm__rain-graph-list {
-		display: flex;
-		flex-direction: row;
-		align-items: flex-end;
-		width: 100%;
+<style scoped lang="scss">
+	.lcars-weather {
+		$self: &;
 		height: 100%;
-		margin: 0;
-		padding: 0;
-		position: absolute;
-		top: 0;
-		left: 0;
-		list-style-type: none;
-	}
-	.owm__rain-graph-bar {
-		flex: 1 1 1px;
-		position: relative;
-		border-top: 2px solid var(--highlight);
-		transition: height .3333s ease;
-	}
-	.owm__rain-graph-bar-variance {
-		width: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		background-color: var(--highlight);
-		transform: translateY(-50%);
-		opacity: .5;
-		transition: height .3333s ease;
-	}
-	.owm__forecast-graph {
-		padding-top: 30%;
-		position: relative;
-		text-align: center;
-	}
-	.owm__forecast-graph-list {
-		display: flex;
-		flex-direction: row;
-		width: 100%;
-		height: 100%;
-		margin: 0;
-		padding: 0;
-		position: absolute;
-		top: 0;
-		left: 0;
-		list-style-type: none;
-	}
-	.owm__forecast-graph-bar {
-		flex: 1 1 1px;
-		display: flex;
-		flex-direction: column;
-		position: relative;
-	}
-	.owm__forecast-graph-bar + .owm__forecast-graph-bar {
-		border-left: 1px solid rgba(255, 255, 255, .2);
-	}
-	.owm__forecast-graph-label {
-		order: 2;
-		margin-top: auto;
-		padding: .25rem;
-		position: relative;
-		z-index: 1;
-		font-feature-settings: 'tnum' 1;
-		font-size: small;
-		font-weight: 600;
-	}
-	.owm__forecast-graph-rain {
-		width: 100%;
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		background-color: var(--highlight);
-		transition: height .3333s ease;
-	}
-	.owm__forecast-graph-details {
-		order: 1;
-		width: 100%;
-		padding: .5rem;
-		position: absolute;
-		left: 0;
-		z-index: 1;
-		transition: bottom .3333s ease;
-	}
-	.owm__forecast-graph-icon {
-		padding-top: 100%;
-		position: relative;
-	}
-	.owm__forecast-graph-icon canvas {
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-	}
-	.owm__forecast-graph-temperature {
-		margin-top: .5rem;
+		&__graph {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+			list-style-type: none;
+		}
+		&__row {
+			display: flex;
+			flex-grow: 1;
+			margin-top: .25rem;
+			&:first-child {
+				margin-top: 0;
+				#{$self}__time,
+				#{$self}__rain-bar,
+				#{$self}__temp {
+					background-color: var(--color-secondary-1);
+				}
+			}
+		}
+		&__time,
+		&__temp {
+			display: inline-flex;
+			justify-content: flex-end;
+			align-items: center;
+			padding: .125rem .5rem;
+			color: var(--canvas-background-color);
+			background-color: var(--color-primary-2);
+			font-variant-numeric: tabular-nums;
+		}
+		&__time {
+			flex: 0 0 var(--label-width);
+			margin-right: .125rem;
+			padding-left: 1rem;
+			border-radius: 2rem 0 0 2rem;
+			font-family: var(--font-heading);
+		}
+		&__rain {
+			flex: 1 0;
+			position: relative;
+			background-image: linear-gradient(to bottom, var(--color-neutral-2), var(--color-neutral-2));
+			background-size: 100% 1px;
+			background-repeat: no-repeat;
+			background-position: 50%;
+		}
+		&__rain-bar {
+			height: 100%;
+			background-color: var(--color-primary-2);
+			border-radius: 0 2rem 2rem 0;
+		}
+		&__condition {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			canvas {
+				height: 1.25rem;
+				width: 1.25rem;
+			}
+		}
+		&__temp {
+			flex: 0 0 10%;
+			margin-left: .125rem;
+			padding-right: 1rem;
+			border-radius: 0 2rem 2rem 0;
+		}
 	}
 </style>
