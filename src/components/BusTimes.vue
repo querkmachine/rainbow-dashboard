@@ -75,7 +75,7 @@ export default {
 			localStorage.setItem('RD_BUSTIMES_TIMETABLE', JSON.stringify(this.stopInfo));
 		},
 		updateTimetable: function() {
-			if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
+			//if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
 			Axios
 				.get(`https://transportapi.com/v3/uk/bus/stop/${process.env.VUE_APP_BUSTIMES_STOP_ATCO_CODE}/live.json`, {
 					params: {

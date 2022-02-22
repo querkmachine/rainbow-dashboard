@@ -108,7 +108,7 @@ export default {
 			localStorage.setItem('RD_MASTODON_STATUSES', JSON.stringify(this.statuses));
 		},
 		loadInitialStatuses: function() {
-			if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
+			//if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
 			M
 				.get('timelines/home', {})
 				.then((response) => {

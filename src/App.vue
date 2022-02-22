@@ -5,12 +5,18 @@
 			<Mastodon />
 			<BusTimes />
 			<OpenWeatherMap />
+			<Bored />
+			<CatFact />
+			<PiHole />
 		</div>
 		<PhilipsHue />
 	</div>
 </template>
 
 <script>
+import Bored from './components/Bored.vue';
+import CatFact from './components/CatFact.vue';
+import PiHole from './components/PiHole.vue';
 import Clock from './components/Clock.vue';
 import Mastodon from './components/Mastodon.vue';
 import OpenWeatherMap from './components/OpenWeatherMap.vue';
@@ -19,6 +25,9 @@ import PhilipsHue from './components/PhilipsHue.vue';
 export default {
 	name: 'app',
 	components: {
+		Bored,
+		CatFact,
+		PiHole,
 		Clock,
 		Mastodon,
 		OpenWeatherMap,
@@ -65,12 +74,13 @@ body {
 .wrapper__inner {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: repeat(3, 1fr);
+	grid-template-rows: repeat(4, 1fr);
 	grid-gap: 1.5rem;
 	grid-template-areas:
 		'mastodon weather weather'
-		'mastodon . buses'
-		'mastodon . buses'
+		'mastodon pihole pihole'
+		'mastodon fact buses'
+		'mastodon bored buses'
 	;
 	height: calc(100vh - 7rem);
 	padding-top: 1rem;
@@ -91,4 +101,7 @@ body {
 .mastodon { grid-area: mastodon; }
 .bus-times { grid-area: buses; }
 .owm { grid-area: weather; }
+.bored { grid-area: bored; }
+.cat-fact { grid-area: fact; }
+.pihole { grid-area: pihole; }
 </style>

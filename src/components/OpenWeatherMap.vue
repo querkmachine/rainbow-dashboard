@@ -119,7 +119,7 @@
 				localStorage.setItem('RD_OWM_FORECAST', JSON.stringify(this.forecastData));
 			},
 			updateForecast: function() {
-				if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
+				//if(process.env.NODE_ENV === 'development' && this.loadData()) { return; }
 				Axios
 					.get(process.env.VUE_APP_OWM_API_ENDPOINT, {
 						params: {

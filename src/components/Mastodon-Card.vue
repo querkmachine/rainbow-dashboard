@@ -41,7 +41,7 @@ export default {
 	margin-bottom: .25rem;
 }
 .mastodon-card__content {
-
+	max-width: 42em;
 }
 .mastodon-card__content > :first-child { margin-top: 0; }
 .mastodon-card__content > :last-child { margin-bottom: 0; }
