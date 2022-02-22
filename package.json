@@ -18,12 +18,14 @@
     "vue-skycon": "git+https://github.com/timleland/vue-skycon.git"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.8",
-    "@vue/cli-plugin-eslint": "^4.5.8",
-    "@vue/cli-service": "^4.5.8",
+    "@vue/cli-plugin-babel": "^5.0.1",
+    "@vue/cli-plugin-eslint": "^5.0.1",
+    "@vue/cli-service": "^5.0.1",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.13.0",
     "eslint-plugin-vue": "^7.1.0",
+    "sass": "^1.49.8",
+    "sass-loader": "^12.6.0",
     "vue-template-compiler": "^2.6.12"
   },
   "eslintConfig": {
